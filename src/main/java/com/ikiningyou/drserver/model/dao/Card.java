@@ -21,6 +21,36 @@ public class Card {
   @Column(name = "card_id", nullable = false)
   private String id;
 
-  @Column(name = "private_key", nullable = false)
-  private String privateKey;
+  @Column(name = "max_size", nullable = false)
+  private int maxSize;
+
+  @Column(name = "type", nullable = false)
+  private String type;
+
+  @Column(name = "is_iso_dep", nullable = false)
+  private boolean isIsoDep;
+
+  @Column(name = "is_nfc_a", nullable = false)
+  private boolean isNfcA;
+
+  @Column(name = "is_nfc_b", nullable = false)
+  private boolean isNfcB;
+
+  @Column(name = "is_nfc_f", nullable = false)
+  private boolean isNfcF;
+
+  @Column(name = "is_nfc_v", nullable = false)
+  private boolean isNfcV;
+
+  @Column(name = "is_ndef", nullable = false)
+  private boolean isNdef;
+
+  @Column(name = "is_ndef_formatable", nullable = false)
+  private boolean isNdefFormatable;
+
+  @Column(name = "is_mifare_classic", nullable = false)
+  private boolean isMifareClassic;
+
+  @Column(name = "is_mifate_ultralight", nullable = false)
+  private boolean isMifareUltralight;
 }
