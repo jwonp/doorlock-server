@@ -21,8 +21,6 @@ public class Room {
   @Column(name = "room_id", nullable = false)
   private int id;
 
-  @Column(name = "public_key", nullable = false)
-  private String publicKey;
 
   @Column(name = "guest_id", nullable = true)
   private String guestId;
