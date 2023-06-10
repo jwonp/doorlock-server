@@ -3,6 +3,7 @@ package com.ikiningyou.drserver.model.dao;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +27,8 @@ public class Card {
 
   @Column(name = "type", nullable = false)
   private String type;
+
+  // tech types flag
 
   @Column(name = "is_iso_dep", nullable = false)
   private boolean isIsoDep;
@@ -53,4 +56,12 @@ public class Card {
 
   @Column(name = "is_mifate_ultralight", nullable = false)
   private boolean isMifareUltralight;
+
+  @Column(name = "is_used", nullable = false)
+  private boolean isUsed;
+
+  @PrePersist
+  void preSetIsUsed() {
+    this.isUsed = false;
+  }
 }
