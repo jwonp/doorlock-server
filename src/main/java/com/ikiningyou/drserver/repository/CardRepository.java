@@ -10,13 +10,13 @@ import org.springframework.data.jpa.repository.Query;
 public interface CardRepository extends JpaRepository<Card, String> {
   @Query(
     value = "SELECT" +
-    " A.id, A.maxSize, A.type," +
-    " A.isIsoDep," +
-    " A.isNfcA, A.isNfcB, A.isNfcF, A.isNfcV," +
-    " A.isNdef, A.isNdefFormatable," +
-    " A.isMifareClassic, A.isMifareUltralight," +
-    " A.isUsed," +
-    " B.id, B.roomId" +
+    " A.id as id, A.maxSize as maxSize, A.type as type," +
+    " A.isIsoDep as isIsoDep," +
+    " A.isNfcA as isNfcA, A.isNfcB as isNfcB, A.isNfcF as isNfcF, A.isNfcV as isNfcV," +
+    " A.isNdef as isNdef, A.isNdefFormatable as isNdefFormatable," +
+    " A.isMifareClassic as isMifareClassic, A.isMifareUltralight as isMifareUltralight," +
+    " A.isUsed as isUsed," +
+    " B.id as userId, B.roomId as roomId" +
     " FROM Card A LEFT JOIN User B ON A.id = B.cardId"
   )
   Optional<List<CardListResponse>> getCardListWithUserIdAndRoomId();
