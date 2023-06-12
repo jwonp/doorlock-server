@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
 public class CardService {
 
@@ -26,6 +25,10 @@ public class CardService {
   @Autowired
   private NfcCardTechTypeParser nfcCardTechTypeParser;
 
+  // public Object[]  testGetAllCards(){
+  //   Optional<List<Object>> row = cardRepository.getCardListWithUserIdAndRoomId();
+  //   return row.get().toArray(new Object[row.get().size()]);
+  // }
   public CardListResponse[] getAllCards() {
     Optional<List<CardListWithUserAndRoom>> rowCardList = cardRepository.getCardListWithUserIdAndRoomId();
 
@@ -59,7 +62,7 @@ public class CardService {
             .type(card.getType())
             .techType(techType)
             .isUsed(card.getIsUsed())
-            .userId(card.getUserId())
+            .userId(card.getUserId() == null ? "" : card.getUserId())
             .roomId(card.getRoomId().isPresent() ? card.getRoomId().get() : -1)
             .build()
         );

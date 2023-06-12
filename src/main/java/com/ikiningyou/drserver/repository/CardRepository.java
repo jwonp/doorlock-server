@@ -1,9 +1,7 @@
 package com.ikiningyou.drserver.repository;
 
 import com.ikiningyou.drserver.model.dao.Card;
-import com.ikiningyou.drserver.model.dto.CardListResponse;
 import com.ikiningyou.drserver.model.dto.CardListWithUserAndRoom;
-
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
