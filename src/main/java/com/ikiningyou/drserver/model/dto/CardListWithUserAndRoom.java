@@ -1,5 +1,7 @@
 package com.ikiningyou.drserver.model.dto;
 
+import java.util.Optional;
+
 public interface CardListWithUserAndRoom {
   public String getId();
 
@@ -31,5 +33,5 @@ public interface CardListWithUserAndRoom {
 
   public String getUserId();
 
-  public int getRoomId();
+  public Optional<Integer> getRoomId();
 }

@@ -9,11 +9,14 @@ import com.ikiningyou.drserver.repository.CardRepository;
 import com.ikiningyou.drserver.util.NfcCardTechTypeParser;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class CardService {
 
@@ -24,13 +27,17 @@ public class CardService {
   private NfcCardTechTypeParser nfcCardTechTypeParser;
 
   public CardListResponse[] getAllCards() {
-    Optional<List<CardListWithUserAndRoom>> cardList = cardRepository.getCardListWithUserIdAndRoomId();
-    if (cardList.isPresent() == true) {
-      CardListWithUserAndRoom[] cardListToArray = cardList
-        .get()
-        .toArray(new CardListWithUserAndRoom[cardList.get().size()]);
+    Optional<List<CardListWithUserAndRoom>> rowCardList = cardRepository.getCardListWithUserIdAndRoomId();
+
+    if (rowCardList.isPresent() == true) {
       List<CardListResponse> cardListResponse = new ArrayList<CardListResponse>();
-      for (CardListWithUserAndRoom card : cardListToArray) {
+      ListIterator<CardListWithUserAndRoom> cardList = rowCardList
+        .get()
+        .listIterator();
+
+      while (cardList.hasNext()) {
+        CardListWithUserAndRoom card = cardList.next();
+
         TechType techType = TechType
           .builder()
           .isIsoDep(card.getIsIsoDep())
@@ -43,6 +50,7 @@ public class CardService {
           .isMifareClassic(card.getIsMifareClassic())
           .isMifareUltralight(card.getIsMifareUltralight())
           .build();
+
         cardListResponse.add(
           CardListResponse
             .builder()
@@ -52,10 +60,11 @@ public class CardService {
             .techType(techType)
             .isUsed(card.getIsUsed())
             .userId(card.getUserId())
-            .roomId(card.getRoomId())
+            .roomId(card.getRoomId().isPresent() ? card.getRoomId().get() : -1)
             .build()
         );
       }
+
       return cardListResponse.toArray(
         new CardListResponse[cardListResponse.size()]
       );
