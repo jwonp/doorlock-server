@@ -2,6 +2,7 @@ package com.ikiningyou.drserver.controller;
 
 import com.ikiningyou.drserver.model.dao.Card;
 import com.ikiningyou.drserver.model.dto.CardAddRequest;
+import com.ikiningyou.drserver.model.dto.CardListResponse;
 import com.ikiningyou.drserver.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,11 @@ public class CardController {
   private CardService cardService;
 
   @GetMapping
-  public ResponseEntity<Card[]> getAllCards() {
-    Card[] cardList = cardService.getAllCards();
+  public ResponseEntity<CardListResponse[]> getAllCards() {
+    CardListResponse[] cardList = cardService.getAllCards();
+    if (cardList == null) {
+      return ResponseEntity.status(400).body(null);
+    }
     return ResponseEntity.status(200).body(cardList);
   }
 

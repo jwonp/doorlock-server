@@ -1,39 +1,22 @@
 package com.ikiningyou.drserver.model.dto;
 
+import com.ikiningyou.drserver.model.data.TechType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public interface CardListResponse {
-  public String getId();
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Builder
+public class CardListResponse {
 
-  public int getMaxSize();
-
-  public String getType();
-
-  // tech types flag
-
-  public boolean getIsIsoDep();
-
-  public boolean getIsNfcA();
-
-  public boolean getIsNfcB();
-
-  public boolean getIsNfcF();
-
-  public boolean getIsNfcV();
-
-  public boolean getIsNdef();
-
-  public boolean getIsNdefFormatable();
-
-  public boolean getIsMifareClassic();
-
-  public boolean getIsMifareUltralight();
-
-  public boolean getIsUsed();
-
-  public String getUserId();
-
-  public int getRoomId();
+  private String id;
+  private int maxSize;
+  private String type;
+  private TechType techType;
+  private boolean isUsed;
+  private String userId;
+  private int roomId;
 }
