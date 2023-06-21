@@ -21,7 +21,7 @@ public class CardController {
   private CardService cardService;
 
   @GetMapping
-  public ResponseEntity<Card> getCardById(@RequestParam String cardId) {
+  public ResponseEntity<Card> getCardById(@RequestParam("id") String cardId) {
     Card card = cardService.getCardById(cardId);
     int statusCode = 200;
     if (card == null) {
