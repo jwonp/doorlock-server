@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -19,6 +20,16 @@ public class RoomController {
   RoomService roomService;
 
   @GetMapping
+  public ResponseEntity<Room> getRoomById(@RequestParam("id") int roomId) {
+    Room room = roomService.getRoomById(roomId);
+    int statusCode = 200;
+    if (room == null) {
+      statusCode = 400;
+    }
+    return ResponseEntity.status(statusCode).body(room);
+  }
+
+  @GetMapping("/list")
   public ResponseEntity<Room[]> getAllRooms() {
     Room[] rooms = roomService.getAllRooms();
     return ResponseEntity.status(200).body(rooms);

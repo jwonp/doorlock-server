@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -22,6 +23,16 @@ public class UserController {
   private UserService userService;
 
   @GetMapping
+  public ResponseEntity<User> getUserById(@RequestParam("id") String userId) {
+    User user = userService.getUserById(userId);
+    int statusCode = 200;
+    if (user == null) {
+      statusCode = 400;
+    }
+    return ResponseEntity.status(statusCode).body(user);
+  }
+
+  @GetMapping("/list")
   public ResponseEntity<User[]> getAllUserList() {
     User[] userList = userService.getAllUserList();
     return ResponseEntity.status(200).body(userList);

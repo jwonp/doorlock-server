@@ -30,7 +30,7 @@ public class CardController {
     return ResponseEntity.status(statusCode).body(card);
   }
 
-  @GetMapping
+  @GetMapping("/list")
   public ResponseEntity<CardListResponse[]> getAllCards() {
     CardListResponse[] cardList = cardService.getAllCards();
     if (cardList == null) {

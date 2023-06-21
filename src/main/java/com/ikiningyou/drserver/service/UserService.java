@@ -5,7 +5,6 @@ import com.ikiningyou.drserver.model.dto.user.UserAddRequest;
 import com.ikiningyou.drserver.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,14 @@ public class UserService {
 
   @Autowired
   private UserRepository userRepository;
+
+  public User getUserById(String userId) {
+    Optional<User> rowUser = userRepository.findById(userId);
+    if (rowUser.isPresent() == false) {
+      return null;
+    }
+    return rowUser.get();
+  }
 
   public User[] getAllUserList() {
     List<User> allUserList = userRepository.findAll();
@@ -42,8 +49,8 @@ public class UserService {
 
   @Transactional
   public Boolean modifyCardIdInUser(String userId, String cardId) {
-    Optional<User> rowUser =  userRepository.findById(userId);
-    if(rowUser.isPresent() == false){
+    Optional<User> rowUser = userRepository.findById(userId);
+    if (rowUser.isPresent() == false) {
       return false;
     }
 
@@ -52,10 +59,11 @@ public class UserService {
 
     return true;
   }
+
   @Transactional
   public Boolean modifyRoomIdInUser(String userId, int roomId) {
-    Optional<User> rowUser =  userRepository.findById(userId);
-    if(rowUser.isPresent() == false){
+    Optional<User> rowUser = userRepository.findById(userId);
+    if (rowUser.isPresent() == false) {
       return false;
     }
 
