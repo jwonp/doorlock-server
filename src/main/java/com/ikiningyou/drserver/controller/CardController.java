@@ -1,8 +1,8 @@
 package com.ikiningyou.drserver.controller;
 
 import com.ikiningyou.drserver.model.dao.Card;
-import com.ikiningyou.drserver.model.dto.CardAddRequest;
-import com.ikiningyou.drserver.model.dto.CardListResponse;
+import com.ikiningyou.drserver.model.dto.card.CardAddRequest;
+import com.ikiningyou.drserver.model.dto.card.CardListResponse;
 import com.ikiningyou.drserver.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.ikiningyou.drserver.service;
 
 import com.ikiningyou.drserver.model.dao.Room;
-import com.ikiningyou.drserver.model.dto.RoomAddRequest;
+import com.ikiningyou.drserver.model.dto.room.RoomAddRequest;
 import com.ikiningyou.drserver.repository.RoomRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

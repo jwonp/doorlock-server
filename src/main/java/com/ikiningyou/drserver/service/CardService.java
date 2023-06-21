@@ -2,9 +2,9 @@ package com.ikiningyou.drserver.service;
 
 import com.ikiningyou.drserver.model.dao.Card;
 import com.ikiningyou.drserver.model.data.TechType;
-import com.ikiningyou.drserver.model.dto.CardAddRequest;
-import com.ikiningyou.drserver.model.dto.CardListResponse;
-import com.ikiningyou.drserver.model.dto.CardListWithUserAndRoom;
+import com.ikiningyou.drserver.model.dto.card.CardAddRequest;
+import com.ikiningyou.drserver.model.dto.card.CardListResponse;
+import com.ikiningyou.drserver.model.dto.card.CardListWithUserAndRoom;
 import com.ikiningyou.drserver.repository.CardRepository;
 import com.ikiningyou.drserver.util.NfcCardTechTypeParser;
 import java.util.ArrayList;
