@@ -28,8 +28,6 @@ public class Room {
   @Column(name = "address", nullable = false)
   private String address;
 
-  @Column(name = "guest_id", nullable = true)
-  private String guestId;
 
   @Column(name = "is_used", nullable = true)
   private boolean isUsed;
