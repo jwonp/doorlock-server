@@ -25,10 +25,15 @@ public class CardService {
   @Autowired
   private NfcCardTechTypeParser nfcCardTechTypeParser;
 
-  // public Object[]  testGetAllCards(){
-  //   Optional<List<Object>> row = cardRepository.getCardListWithUserIdAndRoomId();
-  //   return row.get().toArray(new Object[row.get().size()]);
-  // }
+  public Card getCardById(String userId) {
+    Optional<Card> rowCard = cardRepository.findById(userId);
+    if (rowCard.isPresent() == false) {
+      return null;
+    }
+    Card card = rowCard.get();
+    return card;
+  }
+
   public CardListResponse[] getAllCards() {
     Optional<List<CardListWithUserAndRoom>> rowCardList = cardRepository.getCardListWithUserIdAndRoomId();
 
