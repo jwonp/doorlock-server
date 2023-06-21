@@ -1,7 +1,7 @@
 package com.ikiningyou.drserver.controller;
 
 import com.ikiningyou.drserver.model.dao.Room;
-import com.ikiningyou.drserver.model.dto.RoomAddRequest;
+import com.ikiningyou.drserver.model.dto.room.RoomAddRequest;
 import com.ikiningyou.drserver.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +25,10 @@ public class RoomController {
   }
 
   @PostMapping
-  public ResponseEntity<Room> addRoom(@RequestBody RoomAddRequest roomAddRequest) {
+  public ResponseEntity<Room> addRoom(
+    @RequestBody RoomAddRequest roomAddRequest
+  ) {
     Room savedRoom = roomService.addRoom(roomAddRequest);
-    return ResponseEntity.status(200).body(null);
+    return ResponseEntity.status(200).body(savedRoom);
   }
 }
