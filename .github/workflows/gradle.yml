@@ -13,6 +13,10 @@ on:
   pull_request:
     branches: ["master"]
 
+env:
+  S3_BUCKET_NAME: doorlock-deploy
+  PROJECT_NAME: doorlock-server
+
 permissions:
   contents: read
 
