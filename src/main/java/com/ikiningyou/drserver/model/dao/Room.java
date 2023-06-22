@@ -29,11 +29,7 @@ public class Room {
   private String address;
 
 
-  @Column(name = "is_used", nullable = true)
-  private boolean isUsed;
 
-  @PrePersist
-  void preSetIsUsed() {
-    this.isUsed = false;
-  }
+
+
 }

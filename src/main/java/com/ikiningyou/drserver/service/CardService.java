@@ -66,7 +66,7 @@ public class CardService {
             .maxSize(card.getMaxSize())
             .type(card.getType())
             .techType(techType)
-            .isUsed(card.getIsUsed())
+
             .userId(card.getUserId() == null ? "" : card.getUserId())
             .roomId(card.getRoomId().isPresent() ? card.getRoomId().get() : -1)
             .build()

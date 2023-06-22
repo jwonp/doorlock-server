@@ -16,7 +16,6 @@ public interface CardRepository extends JpaRepository<Card, String> {
     " A.isNfcA as isNfcA, A.isNfcB as isNfcB, A.isNfcF as isNfcF, A.isNfcV as isNfcV," +
     " A.isNdef as isNdef, A.isNdefFormatable as isNdefFormatable," +
     " A.isMifareClassic as isMifareClassic, A.isMifareUltralight as isMifareUltralight," +
-    " A.isUsed as isUsed," +
     " B.id as userId, B.roomId as roomId" +
     " FROM Card A LEFT JOIN User B ON A.id = B.cardId"
   )

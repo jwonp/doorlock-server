@@ -29,7 +29,7 @@ public interface CardListWithUserAndRoom {
 
   public boolean getIsMifareUltralight();
 
-  public boolean getIsUsed();
+
 
   public String getUserId();
 
