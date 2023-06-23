@@ -4,12 +4,11 @@ import com.ikiningyou.drserver.model.dao.Card;
 import com.ikiningyou.drserver.model.data.TechType;
 import com.ikiningyou.drserver.model.dto.card.CardAddRequest;
 import com.ikiningyou.drserver.model.dto.card.CardListResponse;
-import com.ikiningyou.drserver.model.dto.card.CardListWithUserAndRoom;
 import com.ikiningyou.drserver.repository.CardRepository;
 import com.ikiningyou.drserver.util.NfcCardTechTypeParser;
+import com.ikiningyou.drserver.util.TechTypeBuilder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,9 @@ public class CardService {
   @Autowired
   private NfcCardTechTypeParser nfcCardTechTypeParser;
 
+  @Autowired
+  private TechTypeBuilder techTypeBuilder;
+
   public Card getCardById(String userId) {
     Optional<Card> rowCard = cardRepository.findById(userId);
     if (rowCard.isPresent() == false) {
@@ -35,56 +37,29 @@ public class CardService {
   }
 
   public CardListResponse[] getAllCards() {
-    Optional<List<CardListWithUserAndRoom>> rowCardList = cardRepository.getCardListWithUserIdAndRoomId();
+    List<Card> cardList = cardRepository.findAll();
+    List<CardListResponse> cardArray = new ArrayList<CardListResponse>();
 
-    if (rowCardList.isPresent() == true) {
-      List<CardListResponse> cardListResponse = new ArrayList<CardListResponse>();
-      ListIterator<CardListWithUserAndRoom> cardList = rowCardList
-        .get()
-        .listIterator();
-
-      while (cardList.hasNext()) {
-        CardListWithUserAndRoom card = cardList.next();
-
-        TechType techType = TechType
+    for (Card card : cardList) {
+      TechType techType = techTypeBuilder.build(card);
+      cardArray.add(
+        CardListResponse
           .builder()
-          .isIsoDep(card.getIsIsoDep())
-          .isNfcA(card.getIsNfcA())
-          .isNfcB(card.getIsNfcB())
-          .isNfcF(card.getIsNfcF())
-          .isNfcV(card.getIsNfcV())
-          .isNdef(card.getIsNdef())
-          .isNdefFormatable(card.getIsNdefFormatable())
-          .isMifareClassic(card.getIsMifareClassic())
-          .isMifareUltralight(card.getIsMifareUltralight())
-          .build();
-
-        cardListResponse.add(
-          CardListResponse
-            .builder()
-            .id(card.getId())
-            .maxSize(card.getMaxSize())
-            .type(card.getType())
-            .techType(techType)
-
-            .userId(card.getUserId() == null ? "" : card.getUserId())
-            .roomId(card.getRoomId().isPresent() ? card.getRoomId().get() : -1)
-            .build()
-        );
-      }
-
-      return cardListResponse.toArray(
-        new CardListResponse[cardListResponse.size()]
+          .id(card.getId())
+          .maxSize(card.getMaxSize())
+          .type(card.getType())
+          .techType(techType)
+          .build()
       );
     }
-    return null;
+    return cardArray.toArray(new CardListResponse[cardArray.size()]);
   }
 
-  public String addCard(CardAddRequest newCard) {
+  public Card addCard(CardAddRequest newCard) {
     // 만약 등록할 카드가 DB에 있었다면 바로 리턴
     Optional<Card> existedCard = cardRepository.findById(newCard.getId());
     if (existedCard.isPresent() == true) {
-      return "";
+      return null;
     }
 
     String[] techTypes = newCard.getTechTypes();
@@ -109,12 +84,12 @@ public class CardService {
 
     try {
       Card savedCard = cardRepository.save(card);
-      return savedCard.getId();
+      return savedCard;
     } catch (IllegalArgumentException e) {
       e.printStackTrace();
     } catch (OptimisticLockingFailureException e) {
       e.printStackTrace();
     }
-    return "";
+    return null;
   }
 }

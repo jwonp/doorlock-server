@@ -5,6 +5,7 @@ import com.ikiningyou.drserver.model.dto.card.CardAddRequest;
 import com.ikiningyou.drserver.model.dto.card.CardListResponse;
 import com.ikiningyou.drserver.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,9 +24,9 @@ public class CardController {
   @GetMapping
   public ResponseEntity<Card> getCardById(@RequestParam("id") String cardId) {
     Card card = cardService.getCardById(cardId);
-    int statusCode = 200;
+    HttpStatus statusCode = HttpStatus.OK;
     if (card == null) {
-      statusCode = 400;
+      statusCode = HttpStatus.NO_CONTENT;
     }
     return ResponseEntity.status(statusCode).body(card);
   }
@@ -33,20 +34,21 @@ public class CardController {
   @GetMapping("/list")
   public ResponseEntity<CardListResponse[]> getAllCards() {
     CardListResponse[] cardList = cardService.getAllCards();
+    HttpStatus statusCode = HttpStatus.OK;
     if (cardList == null) {
-      return ResponseEntity.status(400).body(null);
+      statusCode = HttpStatus.NO_CONTENT;
     }
-    return ResponseEntity.status(200).body(cardList);
+    return ResponseEntity.status(statusCode).body(cardList);
   }
 
   @PostMapping
-  public ResponseEntity<String> addCard(@RequestBody CardAddRequest card) {
-    String savedCardId = cardService.addCard(card);
-    int statusCode = 200;
-    if (savedCardId.isEmpty()) {
-      statusCode = 400;
+  public ResponseEntity<Card> addCard(@RequestBody CardAddRequest card) {
+    Card savedCard = cardService.addCard(card);
+    HttpStatus statusCode = HttpStatus.OK;
+    if (savedCard == null) {
+      statusCode = HttpStatus.BAD_REQUEST;
     }
 
-    return ResponseEntity.status(statusCode).body(savedCardId);
+    return ResponseEntity.status(statusCode).body(savedCard);
   }
 }
