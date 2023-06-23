@@ -32,10 +32,4 @@ public class User {
 
   @Column(name = "last_tagged", nullable = true)
   private Date lastTagged;
-
-  @Column(name = "room_id", nullable = true)
-  private String roomId;
-
-  @Column(name = "card_id", nullable = true)
-  private String cardId;
 }
