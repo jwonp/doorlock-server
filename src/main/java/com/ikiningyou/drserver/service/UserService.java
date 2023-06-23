@@ -2,7 +2,9 @@ package com.ikiningyou.drserver.service;
 
 import com.ikiningyou.drserver.model.dao.User;
 import com.ikiningyou.drserver.model.dto.user.UserAddRequest;
+import com.ikiningyou.drserver.model.dto.user.UserListWithReservationResponse;
 import com.ikiningyou.drserver.repository.UserRepository;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,17 @@ public class UserService {
     return allUserList.toArray(new User[allUserList.size()]);
   }
 
+  public UserListWithReservationResponse[] getUserListWithReservataion() {
+    Optional<List<UserListWithReservationResponse>> rowUserList = userRepository.getUserListWithReservataion();
+    if (rowUserList.isPresent() == false) {
+      return null;
+    }
+    List<UserListWithReservationResponse> userList = rowUserList.get();
+    return userList.toArray(
+      new UserListWithReservationResponse[userList.size()]
+    );
+  }
+
   public User addUser(UserAddRequest newUser) {
     User user = User
       .builder()
@@ -48,28 +61,14 @@ public class UserService {
   }
 
   @Transactional
-  public Boolean modifyCardIdInUser(String userId, String cardId) {
+  public boolean updateLastTaggedTime(String userId, Date lastTaggedTime) {
     Optional<User> rowUser = userRepository.findById(userId);
     if (rowUser.isPresent() == false) {
       return false;
     }
-
     User user = rowUser.get();
-    user.setCardId(cardId);
-
+    user.setLastTagged(lastTaggedTime);
     return true;
   }
 
-  @Transactional
-  public Boolean modifyRoomIdInUser(String userId, int roomId) {
-    Optional<User> rowUser = userRepository.findById(userId);
-    if (rowUser.isPresent() == false) {
-      return false;
-    }
-
-    User user = rowUser.get();
-    user.setRoomId(userId);
-
-    return true;
-  }
 }

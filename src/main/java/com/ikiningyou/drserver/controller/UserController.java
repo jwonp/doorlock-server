@@ -2,10 +2,15 @@ package com.ikiningyou.drserver.controller;
 
 import com.ikiningyou.drserver.model.dao.User;
 import com.ikiningyou.drserver.model.dto.user.UserAddRequest;
+import com.ikiningyou.drserver.model.dto.user.UserListWithReservationResponse;
 import com.ikiningyou.drserver.model.dto.user.UserModifyCardRequest;
 import com.ikiningyou.drserver.model.dto.user.UserModifyRoomRequest;
+import com.ikiningyou.drserver.model.dto.user.UserUpdateLastTaggedResponse;
 import com.ikiningyou.drserver.service.UserService;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,9 +30,9 @@ public class UserController {
   @GetMapping
   public ResponseEntity<User> getUserById(@RequestParam("id") String userId) {
     User user = userService.getUserById(userId);
-    int statusCode = 200;
+    HttpStatus statusCode = HttpStatus.OK;
     if (user == null) {
-      statusCode = 400;
+      statusCode = HttpStatus.NO_CONTENT;
     }
     return ResponseEntity.status(statusCode).body(user);
   }
@@ -35,46 +40,46 @@ public class UserController {
   @GetMapping("/list")
   public ResponseEntity<User[]> getAllUserList() {
     User[] userList = userService.getAllUserList();
-    return ResponseEntity.status(200).body(userList);
+    HttpStatus statusCode = HttpStatus.OK;
+    if (userList.length == 0) {
+      statusCode = HttpStatus.NO_CONTENT;
+    }
+    return ResponseEntity.status(statusCode).body(userList);
+  }
+
+  @GetMapping("/list/reserved")
+  public ResponseEntity<UserListWithReservationResponse[]> getUserListWithReservation() {
+    UserListWithReservationResponse[] userList = userService.getUserListWithReservataion();
+    HttpStatusCode statusCode = HttpStatus.OK;
+    if (userList == null) {
+      statusCode = HttpStatus.NO_CONTENT;
+    }
+
+    return ResponseEntity.status(statusCode).body(userList);
   }
 
   @PostMapping
-  public ResponseEntity<Boolean> addUser(@RequestBody UserAddRequest user) {
-    userService.addUser(user);
-    return ResponseEntity.status(200).body(true);
+  public ResponseEntity<User> addUser(@RequestBody UserAddRequest user) {
+    User savedUser = userService.addUser(user);
+    HttpStatus statusCode = HttpStatus.OK;
+    if (savedUser == null) {
+      statusCode = HttpStatus.BAD_REQUEST;
+    }
+    return ResponseEntity.status(statusCode).body(savedUser);
   }
 
-  @PatchMapping("/card")
-  public ResponseEntity<Boolean> modifyCardIdInUser(
-    @RequestBody UserModifyCardRequest userModifyCardRequest
+  @PatchMapping("/tag/last")
+  public ResponseEntity<Boolean> updateLastTaggedTime(
+    @RequestBody UserUpdateLastTaggedResponse response
   ) {
-    boolean isModified;
-    try {
-      isModified =
-        userService.modifyCardIdInUser(
-          userModifyCardRequest.getUserId(),
-          userModifyCardRequest.getCardId()
-        );
-    } catch (Exception e) {
-      return ResponseEntity.status(400).body(false);
+    boolean isUpdated = userService.updateLastTaggedTime(
+      response.getUserId(),
+      response.getLastTagged()
+    );
+    HttpStatusCode statusCode = HttpStatus.OK;
+    if (isUpdated == false) {
+      statusCode = HttpStatus.NOT_MODIFIED;
     }
-    return ResponseEntity.status(200).body(isModified);
-  }
-
-  @PatchMapping("/room")
-  public ResponseEntity<Boolean> modifyRoomIdInUser(
-    @RequestBody UserModifyRoomRequest userModifyRoomRequest
-  ) {
-    boolean isModified;
-    try {
-      isModified =
-        userService.modifyRoomIdInUser(
-          userModifyRoomRequest.getUserId(),
-          userModifyRoomRequest.getRoomId()
-        );
-    } catch (Exception e) {
-      return ResponseEntity.status(400).body(false);
-    }
-    return ResponseEntity.status(200).body(isModified);
+    return ResponseEntity.status(statusCode).body(isUpdated);
   }
 }
