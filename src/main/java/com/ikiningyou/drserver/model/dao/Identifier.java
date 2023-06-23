@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 public class Identifier {
 
   @Id
-  @Column(name = "user_id", nullable = false)
-  private String id;
+  @Column(name = "username", nullable = false)
+  private String username;
 
   @Column(name = "password", nullable = false)
   private String password;
