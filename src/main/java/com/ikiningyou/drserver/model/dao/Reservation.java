@@ -28,6 +28,9 @@ public class Reservation {
   @Column(name = "user_id", nullable = false)
   private String userId;
 
+  @Column(name = "card_id", nullable = false)
+  private int cardId;
+
   @Column(name = "room_id", nullable = false)
   private int roomId;
 
