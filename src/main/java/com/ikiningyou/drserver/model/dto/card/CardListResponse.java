@@ -16,7 +16,4 @@ public class CardListResponse {
   private int maxSize;
   private String type;
   private TechType techType;
-  private boolean isUsed;
-  private String userId;
-  private int roomId;
 }
