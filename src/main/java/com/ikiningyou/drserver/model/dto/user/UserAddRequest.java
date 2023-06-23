@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 public class UserAddRequest {
 
   private String id;
+  private String password;
   private String name;
   private String phone;
 }
