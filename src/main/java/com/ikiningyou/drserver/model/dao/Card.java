@@ -3,8 +3,11 @@ package com.ikiningyou.drserver.model.dao;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -57,5 +60,6 @@ public class Card {
   @Column(name = "is_mifate_ultralight", nullable = false)
   private boolean isMifareUltralight;
 
-
+  @OneToOne(mappedBy = "card")
+  private Reservation reservation;
 }
