@@ -3,11 +3,8 @@ package com.ikiningyou.drserver.controller;
 import com.ikiningyou.drserver.model.dao.User;
 import com.ikiningyou.drserver.model.dto.user.UserAddRequest;
 import com.ikiningyou.drserver.model.dto.user.UserListWithReservationResponse;
-import com.ikiningyou.drserver.model.dto.user.UserModifyCardRequest;
-import com.ikiningyou.drserver.model.dto.user.UserModifyRoomRequest;
 import com.ikiningyou.drserver.model.dto.user.UserUpdateLastTaggedResponse;
 import com.ikiningyou.drserver.service.UserService;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -48,10 +45,10 @@ public class UserController {
   }
 
   @GetMapping("/list/reserved")
-  public ResponseEntity<UserListWithReservationResponse[]> getUserListWithReservation() {
-    UserListWithReservationResponse[] userList = userService.getUserListWithReservataion();
+  public ResponseEntity<User[]> getUserListWithReservation() {
+    User[] userList = userService.getUserListWithReservataion();
     HttpStatusCode statusCode = HttpStatus.OK;
-    if (userList == null) {
+    if (userList.length == 0) {
       statusCode = HttpStatus.NO_CONTENT;
     }
 
