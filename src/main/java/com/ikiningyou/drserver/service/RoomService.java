@@ -6,6 +6,7 @@ import com.ikiningyou.drserver.repository.RoomRepository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,8 +28,16 @@ public class RoomService {
     return rooms.toArray(new Room[rooms.size()]);
   }
 
-  public Room addRoom(RoomAddRequest room) {
-    Room newRoom = Room.builder().address(room.getAddress()).build();
-    return roomRepository.save(newRoom);
+  public Room addRoom(String address) {
+    Room newRoom = Room.builder().address(address).build();
+    try {
+      Room savedRoom = roomRepository.save(newRoom);
+      return savedRoom;
+    } catch (IllegalArgumentException e) {
+      e.printStackTrace();
+    } catch (OptimisticLockingFailureException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }
