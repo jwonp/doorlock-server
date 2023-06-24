@@ -4,6 +4,7 @@ import com.ikiningyou.drserver.model.dao.Room;
 import com.ikiningyou.drserver.model.dto.room.RoomAddRequest;
 import com.ikiningyou.drserver.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,9 +23,9 @@ public class RoomController {
   @GetMapping
   public ResponseEntity<Room> getRoomById(@RequestParam("id") int roomId) {
     Room room = roomService.getRoomById(roomId);
-    int statusCode = 200;
+    HttpStatus statusCode = HttpStatus.OK;
     if (room == null) {
-      statusCode = 400;
+      statusCode = HttpStatus.NO_CONTENT;
     }
     return ResponseEntity.status(statusCode).body(room);
   }
@@ -32,14 +33,22 @@ public class RoomController {
   @GetMapping("/list")
   public ResponseEntity<Room[]> getAllRooms() {
     Room[] rooms = roomService.getAllRooms();
-    return ResponseEntity.status(200).body(rooms);
+    HttpStatus statusCode = HttpStatus.OK;
+    if (rooms.length == 0) {
+      statusCode = HttpStatus.NO_CONTENT;
+    }
+    return ResponseEntity.status(statusCode).body(rooms);
   }
 
   @PostMapping
   public ResponseEntity<Room> addRoom(
     @RequestBody RoomAddRequest roomAddRequest
   ) {
-    Room savedRoom = roomService.addRoom(roomAddRequest);
-    return ResponseEntity.status(200).body(savedRoom);
+    Room savedRoom = roomService.addRoom(roomAddRequest.getAddress());
+    HttpStatus statusCode = HttpStatus.OK;
+    if (savedRoom == null) {
+      statusCode = HttpStatus.BAD_REQUEST;
+    }
+    return ResponseEntity.status(statusCode).body(savedRoom);
   }
 }
