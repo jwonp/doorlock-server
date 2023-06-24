@@ -2,7 +2,7 @@ package com.ikiningyou.drserver.controller;
 
 import com.ikiningyou.drserver.model.dao.User;
 import com.ikiningyou.drserver.model.dto.user.UserAddRequest;
-import com.ikiningyou.drserver.model.dto.user.UserListWithReservationResponse;
+
 import com.ikiningyou.drserver.model.dto.user.UserUpdateLastTaggedResponse;
 import com.ikiningyou.drserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
