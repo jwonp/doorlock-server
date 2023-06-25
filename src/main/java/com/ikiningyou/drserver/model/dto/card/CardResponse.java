@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
-public class CardListResponse {
+public class CardResponse {
 
   private String id;
   private int maxSize;
