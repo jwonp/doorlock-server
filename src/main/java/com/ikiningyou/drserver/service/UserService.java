@@ -2,21 +2,25 @@ package com.ikiningyou.drserver.service;
 
 import com.ikiningyou.drserver.model.dao.User;
 import com.ikiningyou.drserver.model.dto.user.UserAddRequest;
-import com.ikiningyou.drserver.model.dto.user.UserListWithReservationResponse;
 import com.ikiningyou.drserver.repository.UserRepository;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 public class UserService {
 
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private UserDetailService userDetailService;
 
   public User getUserById(String userId) {
     Optional<User> rowUser = userRepository.findById(userId);
@@ -31,15 +35,9 @@ public class UserService {
     return allUserList.toArray(new User[allUserList.size()]);
   }
 
-  public UserListWithReservationResponse[] getUserListWithReservataion() {
-    Optional<List<UserListWithReservationResponse>> rowUserList = userRepository.getUserListWithReservataion();
-    if (rowUserList.isPresent() == false) {
-      return null;
-    }
-    List<UserListWithReservationResponse> userList = rowUserList.get();
-    return userList.toArray(
-      new UserListWithReservationResponse[userList.size()]
-    );
+  public User[] getUserListWithReservataion() {
+    List<User> userList = userRepository.findAll();
+    return userList.toArray(new User[userList.size()]);
   }
 
   public User addUser(UserAddRequest newUser) {
@@ -49,8 +47,10 @@ public class UserService {
       .name(newUser.getName())
       .phone(newUser.getPhone())
       .build();
+
     try {
       User savedUser = userRepository.save(user);
+      userDetailService.addUserDetail(newUser.getId(), newUser.getPassword());
       return savedUser;
     } catch (IllegalArgumentException e) {
       e.printStackTrace();
@@ -70,5 +70,4 @@ public class UserService {
     user.setLastTagged(lastTaggedTime);
     return true;
   }
-
 }
