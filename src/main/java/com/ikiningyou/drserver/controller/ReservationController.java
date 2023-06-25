@@ -2,6 +2,8 @@ package com.ikiningyou.drserver.controller;
 
 import com.ikiningyou.drserver.model.dao.Reservation;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationAddRequest;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationResponse;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationWithUserResponse;
 import com.ikiningyou.drserver.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +22,8 @@ public class ReservationController {
   private ReservationService reservationService;
 
   @GetMapping("/list")
-  public ResponseEntity<Reservation[]> getAllReservations() {
-    Reservation[] reservationList = reservationService.getAllReservations();
+  public ResponseEntity<ReservationResponse[]> getAllReservations() {
+    ReservationResponse[] reservationList = reservationService.getAllReservations();
     HttpStatus statusCode = HttpStatus.OK;
     if (reservationList.length == 0) {
       statusCode = HttpStatus.NO_CONTENT;
@@ -30,8 +32,8 @@ public class ReservationController {
   }
 
   @GetMapping("/list/user")
-  public ResponseEntity<Reservation[]> getAllReservationWithUser() {
-    Reservation[] reservationlist = reservationService.getAllReservationWithUser();
+  public ResponseEntity<ReservationWithUserResponse[]> getAllReservationWithUser() {
+    ReservationWithUserResponse[] reservationlist = reservationService.getAllReservationWithUser();
     HttpStatus statusCode = HttpStatus.OK;
     if (reservationlist.length == 0) {
       statusCode = HttpStatus.NO_CONTENT;
@@ -40,10 +42,10 @@ public class ReservationController {
   }
 
   @PostMapping
-  public ResponseEntity<Reservation> addReservation(
+  public ResponseEntity<ReservationResponse> addReservation(
     @RequestBody ReservationAddRequest reservation
   ) {
-    Reservation savedReservation = reservationService.addReservation(
+    ReservationResponse savedReservation = reservationService.addReservation(
       reservation.getUserId(),
       reservation.getRoomId(),
       reservation.getCardId()

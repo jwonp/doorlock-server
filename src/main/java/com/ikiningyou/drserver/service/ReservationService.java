@@ -4,10 +4,14 @@ import com.ikiningyou.drserver.model.dao.Card;
 import com.ikiningyou.drserver.model.dao.Reservation;
 import com.ikiningyou.drserver.model.dao.Room;
 import com.ikiningyou.drserver.model.dao.User;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationResponse;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationWithUserResponse;
 import com.ikiningyou.drserver.repository.CardRepository;
 import com.ikiningyou.drserver.repository.ReservationRepository;
 import com.ikiningyou.drserver.repository.RoomRepository;
 import com.ikiningyou.drserver.repository.UserRepository;
+import com.ikiningyou.drserver.util.builder.reservation.ReservationBuilder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,18 +33,33 @@ public class ReservationService {
   @Autowired
   private RoomRepository roomRepository;
 
-  public Reservation[] getAllReservations() {
-    List<Reservation> reservationList = reservationRepository.findAll();
-    return reservationList.toArray(new Reservation[reservationList.size()]);
+  public ReservationResponse[] getAllReservations() {
+    List<Reservation> reservations = reservationRepository.findAll();
+    List<ReservationResponse> reservationList = new ArrayList<ReservationResponse>();
+    for (Reservation reservation : reservations) {
+      reservationList.add(
+        ReservationBuilder.ReservationToReservationResponse(reservation)
+      );
+    }
+    return reservationList.toArray(
+      new ReservationResponse[reservationList.size()]
+    );
   }
 
-  public Reservation[] getAllReservationWithUser() {
-    List<Reservation> reservationList = reservationRepository.findAllReservations();
-
-    return reservationList.toArray(new Reservation[reservationList.size()]);
+  public ReservationWithUserResponse[] getAllReservationWithUser() {
+    List<Reservation> reservations = reservationRepository.findAllReservations();
+    List<ReservationWithUserResponse> reservationList = new ArrayList<ReservationWithUserResponse>();
+    for(Reservation reservation: reservations){
+      reservationList.add(ReservationBuilder.ReservationToReservationWithUserResponse(reservation));
+    }
+    return reservationList.toArray(new ReservationWithUserResponse[reservationList.size()]);
   }
 
-  public Reservation addReservation(String userId, int roomId, String cardId) {
+  public ReservationResponse addReservation(
+    String userId,
+    int roomId,
+    String cardId
+  ) {
     Optional<Card> card = cardRepository.findById(cardId);
     Optional<Room> room = roomRepository.findById(roomId);
     Optional<User> user = userRepository.findById(userId);
@@ -57,7 +76,9 @@ public class ReservationService {
       Reservation savedReservation = reservationRepository.saveAndFlush(
         newReservation
       );
-      return savedReservation;
+      return ReservationBuilder.ReservationToReservationResponse(
+        savedReservation
+      );
     } catch (IllegalArgumentException e) {
       e.printStackTrace();
     } catch (OptimisticLockingFailureException e) {
