@@ -1,7 +1,10 @@
 package com.ikiningyou.drserver.service;
 
 import com.ikiningyou.drserver.model.dao.Room;
+import com.ikiningyou.drserver.model.dto.room.RoomResponse;
 import com.ikiningyou.drserver.repository.RoomRepository;
+import com.ikiningyou.drserver.util.builder.room.RoomBuilder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,24 +17,29 @@ public class RoomService {
   @Autowired
   RoomRepository roomRepository;
 
-  public Room getRoomById(int roomId) {
+  public RoomResponse getRoomById(int roomId) {
     Optional<Room> rowRoom = roomRepository.findById(roomId);
     if (rowRoom.isPresent() == false) {
       return null;
     }
-    return rowRoom.get();
+    Room room = rowRoom.get();
+    return RoomBuilder.RoomToRoomResponse(room);
   }
 
-  public Room[] getAllRooms() {
+  public RoomResponse[] getAllRooms() {
     List<Room> rooms = roomRepository.findAll();
-    return rooms.toArray(new Room[rooms.size()]);
+    List<RoomResponse> roomList = new ArrayList<RoomResponse>();
+    for (Room room : rooms) {
+      roomList.add(RoomBuilder.RoomToRoomResponse(room));
+    }
+    return roomList.toArray(new RoomResponse[roomList.size()]);
   }
 
-  public Room addRoom(String address) {
+  public RoomResponse addRoom(String address) {
     Room newRoom = Room.builder().address(address).build();
     try {
       Room savedRoom = roomRepository.save(newRoom);
-      return savedRoom;
+      return RoomBuilder.RoomToRoomResponse(savedRoom);
     } catch (IllegalArgumentException e) {
       e.printStackTrace();
     } catch (OptimisticLockingFailureException e) {
