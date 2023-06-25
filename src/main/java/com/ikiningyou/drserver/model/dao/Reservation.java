@@ -7,11 +7,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +24,7 @@ import org.hibernate.annotations.DynamicInsert;
 @AllArgsConstructor
 @DynamicInsert
 @Table(name = "reservation")
-public class Reservation implements Serializable {
+public class Reservation {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,8 +52,8 @@ public class Reservation implements Serializable {
   // @Column(name = "room_id", nullable = false)
   // private int roomId;
 
-  @Column(name = "is_checked_in", nullable = false)
-  private boolean isCheckedIn;
+  @Column(name = "is_checked_in", nullable = true)
+  private Boolean isCheckedIn;
 
   @PrePersist
   void preSetIsCheckedIn() {
