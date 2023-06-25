@@ -1,7 +1,6 @@
 package com.ikiningyou.drserver.service;
 
 import com.ikiningyou.drserver.model.dao.Room;
-import com.ikiningyou.drserver.model.dto.room.RoomAddRequest;
 import com.ikiningyou.drserver.repository.RoomRepository;
 import java.util.List;
 import java.util.Optional;
