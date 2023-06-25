@@ -2,7 +2,7 @@ package com.ikiningyou.drserver.controller;
 
 import com.ikiningyou.drserver.model.dao.User;
 import com.ikiningyou.drserver.model.dto.user.UserAddRequest;
-
+import com.ikiningyou.drserver.model.dto.user.UserResponse;
 import com.ikiningyou.drserver.model.dto.user.UserUpdateLastTaggedResponse;
 import com.ikiningyou.drserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,8 @@ public class UserController {
   private UserService userService;
 
   @GetMapping
-  public ResponseEntity<User> getUserById(@RequestParam("id") String userId) {
-    User user = userService.getUserById(userId);
+  public ResponseEntity<UserResponse> getUserById(@RequestParam("id") String userId) {
+    UserResponse user = userService.getUserById(userId);
     HttpStatus statusCode = HttpStatus.OK;
     if (user == null) {
       statusCode = HttpStatus.NO_CONTENT;
@@ -35,8 +35,8 @@ public class UserController {
   }
 
   @GetMapping("/list")
-  public ResponseEntity<User[]> getAllUserList() {
-    User[] userList = userService.getAllUserList();
+  public ResponseEntity<UserResponse[]> getAllUserList() {
+    UserResponse[] userList = userService.getAllUserList();
     HttpStatus statusCode = HttpStatus.OK;
     if (userList.length == 0) {
       statusCode = HttpStatus.NO_CONTENT;
@@ -44,20 +44,11 @@ public class UserController {
     return ResponseEntity.status(statusCode).body(userList);
   }
 
-  @GetMapping("/list/reserved")
-  public ResponseEntity<User[]> getUserListWithReservation() {
-    User[] userList = userService.getUserListWithReservataion();
-    HttpStatusCode statusCode = HttpStatus.OK;
-    if (userList.length == 0) {
-      statusCode = HttpStatus.NO_CONTENT;
-    }
 
-    return ResponseEntity.status(statusCode).body(userList);
-  }
 
   @PostMapping
-  public ResponseEntity<User> addUser(@RequestBody UserAddRequest user) {
-    User savedUser = userService.addUser(user);
+  public ResponseEntity<UserResponse> addUser(@RequestBody UserAddRequest user) {
+    UserResponse savedUser = userService.addUser(user);
     HttpStatus statusCode = HttpStatus.OK;
     if (savedUser == null) {
       statusCode = HttpStatus.BAD_REQUEST;

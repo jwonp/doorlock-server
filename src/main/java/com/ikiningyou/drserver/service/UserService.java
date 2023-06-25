@@ -2,7 +2,10 @@ package com.ikiningyou.drserver.service;
 
 import com.ikiningyou.drserver.model.dao.User;
 import com.ikiningyou.drserver.model.dto.user.UserAddRequest;
+import com.ikiningyou.drserver.model.dto.user.UserResponse;
 import com.ikiningyou.drserver.repository.UserRepository;
+import com.ikiningyou.drserver.util.builder.user.UserBuilder;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,25 +25,27 @@ public class UserService {
   @Autowired
   private UserDetailService userDetailService;
 
-  public User getUserById(String userId) {
+  public UserResponse getUserById(String userId) {
     Optional<User> rowUser = userRepository.findById(userId);
     if (rowUser.isPresent() == false) {
       return null;
     }
-    return rowUser.get();
+    User user = rowUser.get();
+
+    return UserBuilder.UserToUserResponse(user);
   }
 
-  public User[] getAllUserList() {
+  public UserResponse[] getAllUserList() {
     List<User> allUserList = userRepository.findAll();
-    return allUserList.toArray(new User[allUserList.size()]);
+    List<UserResponse> userList = new ArrayList<UserResponse>();
+    for (User user : allUserList) {
+      userList.add(UserBuilder.UserToUserResponse(user));
+    }
+
+    return userList.toArray(new UserResponse[userList.size()]);
   }
 
-  public User[] getUserListWithReservataion() {
-    List<User> userList = userRepository.findAll();
-    return userList.toArray(new User[userList.size()]);
-  }
-
-  public User addUser(UserAddRequest newUser) {
+  public UserResponse addUser(UserAddRequest newUser) {
     User user = User
       .builder()
       .id(newUser.getId())
@@ -51,7 +56,7 @@ public class UserService {
     try {
       User savedUser = userRepository.save(user);
       userDetailService.addUserDetail(newUser.getId(), newUser.getPassword());
-      return savedUser;
+      return UserBuilder.UserToUserResponse(savedUser);
     } catch (IllegalArgumentException e) {
       e.printStackTrace();
     } catch (OptimisticLockingFailureException e) {
