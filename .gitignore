@@ -39,3 +39,4 @@ src/main/resources/application-prod.yml
 src/main/resources/application.yml
 src/test/java/com/ikiningyou/drserver/
 deprecated/UserConfig.java
+short.txt
