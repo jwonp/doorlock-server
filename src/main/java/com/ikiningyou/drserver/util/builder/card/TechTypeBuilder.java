@@ -1,4 +1,4 @@
-package com.ikiningyou.drserver.util;
+package com.ikiningyou.drserver.util.builder.card;
 
 import com.ikiningyou.drserver.model.dao.Card;
 import com.ikiningyou.drserver.model.data.TechType;
@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class TechTypeBuilder {
 
-   public TechType build(Card card) {
-    TechType techType = TechType
+  public static TechType CardtoTechType(Card card) {
+    return TechType
       .builder()
       .isIsoDep(card.isIsoDep())
       .isNfcA(card.isNfcA())
@@ -20,6 +20,5 @@ public class TechTypeBuilder {
       .isMifareClassic(card.isMifareClassic())
       .isMifareUltralight(card.isMifareUltralight())
       .build();
-    return techType;
   }
 }
