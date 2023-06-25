@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class NfcCardTechTypeParser {
-
   public static final int IS_ISO_DEP = 0;
   public static final int IS_NFC_A = 1;
   public static final int IS_NFC_B = 2;
@@ -17,31 +16,35 @@ public class NfcCardTechTypeParser {
   public static final int IS_MIFARE_CLASSIC = 7;
   public static final int IS_MIFARE_ULTRA_LIGHT = 8;
 
-  private final String ISO_DEP = "IsoDep";
-  private final String NFC_A = "NfcA";
-  private final String NFC_B = "NfcB";
-  private final String NFC_F = "NfcF";
-  private final String NFC_V = "NfcV";
-  private final String NDEF = "Ndef";
-  private final String NDEF_FORMATABLE = "NdefFormatable";
-  private final String MIFARE_CLASSIC = "MifareClassic";
-  private final String MIFARE_ULTRA_LIGHT = "MifareUltralight";
+  public static boolean[] parseTechType(String[] techTypes) {
+    
+  
+    
 
-  private final String[] TECH_TYPES = {
-    ISO_DEP,
-    NFC_A,
-    NFC_B,
-    NFC_F,
-    NFC_V,
-    NDEF,
-    NDEF_FORMATABLE,
-    MIFARE_CLASSIC,
-    MIFARE_ULTRA_LIGHT,
-  };
+    String ISO_DEP = "IsoDep";
+    String NFC_A = "NfcA";
+    String NFC_B = "NfcB";
+    String NFC_F = "NfcF";
+    String NFC_V = "NfcV";
+    String NDEF = "Ndef";
+    String NDEF_FORMATABLE = "NdefFormatable";
+    String MIFARE_CLASSIC = "MifareClassic";
+    String MIFARE_ULTRA_LIGHT = "MifareUltralight";
 
-  private final List<String> TECH_TYPE_LIST = Arrays.asList(TECH_TYPES);
+    String[] TECH_TYPES = {
+      ISO_DEP,
+      NFC_A,
+      NFC_B,
+      NFC_F,
+      NFC_V,
+      NDEF,
+      NDEF_FORMATABLE,
+      MIFARE_CLASSIC,
+      MIFARE_ULTRA_LIGHT,
+    };
 
-  public boolean[] parseTechType(String[] techTypes) {
+    List<String> TECH_TYPE_LIST = Arrays.asList(TECH_TYPES);
+
     boolean[] techTypeFlags = new boolean[9];
 
     for (String techType : techTypes) {
