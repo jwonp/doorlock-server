@@ -3,6 +3,7 @@ package com.ikiningyou.drserver.util.builder.card;
 import com.ikiningyou.drserver.model.dao.Card;
 import com.ikiningyou.drserver.model.dto.card.CardAddRequest;
 import com.ikiningyou.drserver.model.dto.card.CardResponse;
+import com.ikiningyou.drserver.model.dto.card.CardWithReservationResponse;
 import com.ikiningyou.drserver.util.NfcCardTechTypeParser;
 
 public class CardBuilder {
@@ -14,6 +15,21 @@ public class CardBuilder {
       .maxSize(card.getMaxSize())
       .type(card.getType())
       .techType(TechTypeBuilder.CardtoTechType(card))
+      .build();
+  }
+
+  public static CardWithReservationResponse CardToCardWithReservationResponse(
+    Card card
+  ) {
+    return CardWithReservationResponse
+      .builder()
+      .id(card.getId())
+      .maxSize(card.getMaxSize())
+      .type(card.getType())
+      .techType(TechTypeBuilder.CardtoTechType(card))
+      .reservationId(card.getReservation().getId())
+      .roomId(card.getReservation().getRoom().getId())
+      .userId(card.getReservation().getUser().getId())
       .build();
   }
 

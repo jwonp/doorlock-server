@@ -4,6 +4,7 @@ import com.ikiningyou.drserver.model.dao.Card;
 import com.ikiningyou.drserver.model.data.TechType;
 import com.ikiningyou.drserver.model.dto.card.CardAddRequest;
 import com.ikiningyou.drserver.model.dto.card.CardResponse;
+import com.ikiningyou.drserver.model.dto.card.CardWithReservationResponse;
 import com.ikiningyou.drserver.repository.CardRepository;
 import com.ikiningyou.drserver.util.builder.card.CardBuilder;
 import com.ikiningyou.drserver.util.builder.card.TechTypeBuilder;
@@ -31,6 +32,16 @@ public class CardService {
     return CardBuilder.CardToCardResponse(card);
   }
 
+  public CardWithReservationResponse[] getCardListWithReservation() {
+    List<Card> cards = cardRepository.findAll();
+    List<CardWithReservationResponse> cardList = new ArrayList<CardWithReservationResponse>();
+    for (Card card : cards) {
+      cardList.add(CardBuilder.CardToCardWithReservationResponse(card));
+    }
+
+    return cardList.toArray(new CardWithReservationResponse[cardList.size()]);
+  }
+
   public CardResponse[] getAllCards() {
     List<Card> cardList = cardRepository.findAll();
     List<CardResponse> cardArray = new ArrayList<CardResponse>();
@@ -51,8 +62,11 @@ public class CardService {
   }
 
   public CardResponse addCard(CardAddRequest newCard) {
-    Card card = CardBuilder.CardAddRequestToCard(newCard);
+    if (cardRepository.findById(newCard.getId()).isPresent()) {
+      return null;
+    }
 
+    Card card = CardBuilder.CardAddRequestToCard(newCard);
     try {
       Card savedCard = cardRepository.save(card);
       return CardBuilder.CardToCardResponse(savedCard);

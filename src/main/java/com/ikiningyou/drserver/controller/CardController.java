@@ -2,6 +2,7 @@ package com.ikiningyou.drserver.controller;
 
 import com.ikiningyou.drserver.model.dto.card.CardAddRequest;
 import com.ikiningyou.drserver.model.dto.card.CardResponse;
+import com.ikiningyou.drserver.model.dto.card.CardWithReservationResponse;
 import com.ikiningyou.drserver.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,16 @@ public class CardController {
     CardResponse[] cardList = cardService.getAllCards();
     HttpStatus statusCode = HttpStatus.OK;
     if (cardList == null) {
+      statusCode = HttpStatus.NO_CONTENT;
+    }
+    return ResponseEntity.status(statusCode).body(cardList);
+  }
+
+  @GetMapping("/list/reservation")
+  public ResponseEntity<CardWithReservationResponse[]> getCardListWithReservation() {
+    CardWithReservationResponse[] cardList = cardService.getCardListWithReservation();
+    HttpStatus statusCode = HttpStatus.OK;
+    if (cardList.length == 0) {
       statusCode = HttpStatus.NO_CONTENT;
     }
     return ResponseEntity.status(statusCode).body(cardList);
