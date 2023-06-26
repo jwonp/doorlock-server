@@ -1,9 +1,10 @@
 package com.ikiningyou.drserver.controller;
 
-
+import com.ikiningyou.drserver.model.dto.reservation.ReservationWithUserResponse;
 import com.ikiningyou.drserver.model.dto.user.UserAddRequest;
 import com.ikiningyou.drserver.model.dto.user.UserResponse;
 import com.ikiningyou.drserver.model.dto.user.UserUpdateLastTaggedResponse;
+import com.ikiningyou.drserver.model.dto.user.UserWithReservationsResponse;
 import com.ikiningyou.drserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,9 @@ public class UserController {
   private UserService userService;
 
   @GetMapping
-  public ResponseEntity<UserResponse> getUserById(@RequestParam("id") String userId) {
+  public ResponseEntity<UserResponse> getUserById(
+    @RequestParam("id") String userId
+  ) {
     UserResponse user = userService.getUserById(userId);
     HttpStatus statusCode = HttpStatus.OK;
     if (user == null) {
@@ -44,10 +47,20 @@ public class UserController {
     return ResponseEntity.status(statusCode).body(userList);
   }
 
-
+  @GetMapping("/list/reservation")
+  public ResponseEntity<UserWithReservationsResponse[]> getUserListWithReservations() {
+    UserWithReservationsResponse[] userList = userService.getUserListWithReservations();
+    HttpStatus statusCode = HttpStatus.OK;
+    if (userList.length == 0) {
+      statusCode = HttpStatus.NO_CONTENT;
+    }
+    return ResponseEntity.status(statusCode).body(userList);
+  }
 
   @PostMapping
-  public ResponseEntity<UserResponse> addUser(@RequestBody UserAddRequest user) {
+  public ResponseEntity<UserResponse> addUser(
+    @RequestBody UserAddRequest user
+  ) {
     UserResponse savedUser = userService.addUser(user);
     HttpStatus statusCode = HttpStatus.OK;
     if (savedUser == null) {

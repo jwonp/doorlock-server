@@ -3,6 +3,7 @@ package com.ikiningyou.drserver.service;
 import com.ikiningyou.drserver.model.dao.User;
 import com.ikiningyou.drserver.model.dto.user.UserAddRequest;
 import com.ikiningyou.drserver.model.dto.user.UserResponse;
+import com.ikiningyou.drserver.model.dto.user.UserWithReservationsResponse;
 import com.ikiningyou.drserver.repository.UserRepository;
 import com.ikiningyou.drserver.util.builder.user.UserBuilder;
 import java.util.ArrayList;
@@ -35,6 +36,16 @@ public class UserService {
     return UserBuilder.UserToUserResponse(user);
   }
 
+  public UserWithReservationsResponse[] getUserListWithReservations() {
+    List<User> users = userRepository.findAll();
+    List<UserWithReservationsResponse> userList = new ArrayList<UserWithReservationsResponse>();
+
+    for (User user : users) {
+      userList.add(UserBuilder.UserToUserWithReservationsResponse(user));
+    }
+    return userList.toArray(new UserWithReservationsResponse[userList.size()]);
+  }
+
   public UserResponse[] getAllUserList() {
     List<User> allUserList = userRepository.findAll();
     List<UserResponse> userList = new ArrayList<UserResponse>();
@@ -46,6 +57,9 @@ public class UserService {
   }
 
   public UserResponse addUser(UserAddRequest newUser) {
+    if (userRepository.findById(newUser.getId()).isPresent()) {
+      return null;
+    }
     User user = User
       .builder()
       .id(newUser.getId())
