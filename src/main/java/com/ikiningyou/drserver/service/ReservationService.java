@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
@@ -49,10 +50,14 @@ public class ReservationService {
   public ReservationWithUserResponse[] getAllReservationWithUser() {
     List<Reservation> reservations = reservationRepository.findAllReservations();
     List<ReservationWithUserResponse> reservationList = new ArrayList<ReservationWithUserResponse>();
-    for(Reservation reservation: reservations){
-      reservationList.add(ReservationBuilder.ReservationToReservationWithUserResponse(reservation));
+    for (Reservation reservation : reservations) {
+      reservationList.add(
+        ReservationBuilder.ReservationToReservationWithUserResponse(reservation)
+      );
     }
-    return reservationList.toArray(new ReservationWithUserResponse[reservationList.size()]);
+    return reservationList.toArray(
+      new ReservationWithUserResponse[reservationList.size()]
+    );
   }
 
   public ReservationResponse addReservation(
@@ -82,6 +87,8 @@ public class ReservationService {
     } catch (IllegalArgumentException e) {
       e.printStackTrace();
     } catch (OptimisticLockingFailureException e) {
+      e.printStackTrace();
+    } catch (DataIntegrityViolationException e) {
       e.printStackTrace();
     }
     return null;
