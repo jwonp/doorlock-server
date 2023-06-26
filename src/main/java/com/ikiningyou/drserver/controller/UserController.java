@@ -1,6 +1,6 @@
 package com.ikiningyou.drserver.controller;
 
-import com.ikiningyou.drserver.model.dao.User;
+
 import com.ikiningyou.drserver.model.dto.user.UserAddRequest;
 import com.ikiningyou.drserver.model.dto.user.UserResponse;
 import com.ikiningyou.drserver.model.dto.user.UserUpdateLastTaggedResponse;

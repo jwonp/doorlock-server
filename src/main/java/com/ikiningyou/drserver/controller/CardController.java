@@ -1,6 +1,5 @@
 package com.ikiningyou.drserver.controller;
 
-import com.ikiningyou.drserver.model.dao.Card;
 import com.ikiningyou.drserver.model.dto.card.CardAddRequest;
 import com.ikiningyou.drserver.model.dto.card.CardResponse;
 import com.ikiningyou.drserver.service.CardService;
@@ -22,7 +21,9 @@ public class CardController {
   private CardService cardService;
 
   @GetMapping
-  public ResponseEntity<CardResponse> getCardById(@RequestParam("id") String cardId) {
+  public ResponseEntity<CardResponse> getCardById(
+    @RequestParam("id") String cardId
+  ) {
     CardResponse card = cardService.getCardById(cardId);
     HttpStatus statusCode = HttpStatus.OK;
     if (card == null) {
@@ -42,9 +43,12 @@ public class CardController {
   }
 
   @PostMapping
-  public ResponseEntity<CardResponse> addCard(@RequestBody CardAddRequest card) {
+  public ResponseEntity<CardResponse> addCard(
+    @RequestBody CardAddRequest card
+  ) {
     CardResponse savedCard = cardService.addCard(card);
     HttpStatus statusCode = HttpStatus.OK;
+
     if (savedCard == null) {
       statusCode = HttpStatus.BAD_REQUEST;
     }

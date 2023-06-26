@@ -18,9 +18,6 @@ public class NfcCardTechTypeParser {
 
   public static boolean[] parseTechType(String[] techTypes) {
     
-  
-    
-
     String ISO_DEP = "IsoDep";
     String NFC_A = "NfcA";
     String NFC_B = "NfcB";
