@@ -28,11 +28,11 @@ public class CardBuilder {
       .type(card.getType())
       .techType(TechTypeBuilder.CardtoTechType(card))
       .reservationId(
-        card.getReservation() == null ? null : card.getReservation().getId()
+        card.getReservation() == null ? 0l : card.getReservation().getId()
       )
       .roomId(
         card.getReservation() == null
-          ? null
+          ? 0
           : card.getReservation().getRoom().getId()
       )
       .userId(
