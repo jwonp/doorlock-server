@@ -27,9 +27,19 @@ public class CardBuilder {
       .maxSize(card.getMaxSize())
       .type(card.getType())
       .techType(TechTypeBuilder.CardtoTechType(card))
-      .reservationId(card.getReservation().getId())
-      .roomId(card.getReservation().getRoom().getId())
-      .userId(card.getReservation().getUser().getId())
+      .reservationId(
+        card.getReservation() == null ? null : card.getReservation().getId()
+      )
+      .roomId(
+        card.getReservation() == null
+          ? null
+          : card.getReservation().getRoom().getId()
+      )
+      .userId(
+        card.getReservation() == null
+          ? null
+          : card.getReservation().getUser().getId()
+      )
       .build();
   }
 
