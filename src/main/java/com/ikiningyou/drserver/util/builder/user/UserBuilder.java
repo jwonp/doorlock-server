@@ -28,7 +28,7 @@ public class UserBuilder {
       .lastTagged(user.getLastTagged())
       .reservations(
         ReservationIdsBuilder.ReservationsToReservationWithoutUserIdArray(
-          user.getReservation()
+          user.getReservations()
         )
       )
       .build();

@@ -8,7 +8,6 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.Date;
 import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,5 +37,5 @@ public class User {
   private Date lastTagged;
 
   @OneToMany(mappedBy = "user")
-  private List<Reservation> reservation;
+  private List<Reservation> reservations;
 }
