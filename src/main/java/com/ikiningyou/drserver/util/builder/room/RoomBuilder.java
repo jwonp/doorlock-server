@@ -19,7 +19,7 @@ public class RoomBuilder {
   public static RoomWithReservation RoomToRoomWithReservation(Room room) {
     return RoomWithReservation
       .builder()
-      .roomId(room.getId())
+      .id(room.getId())
       .address(room.getAddress())
       .reservations(
         ReservationIdsBuilder.ReservationsToReservationWithoutRoomIdArray(

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 public class RoomWithReservation {
-    private int roomId;
+    private int id;
     private String address;
     private ReservationWithoutRoomId[] reservations;
 }
