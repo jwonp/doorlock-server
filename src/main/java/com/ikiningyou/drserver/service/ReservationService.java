@@ -4,6 +4,7 @@ import com.ikiningyou.drserver.model.dao.Card;
 import com.ikiningyou.drserver.model.dao.Reservation;
 import com.ikiningyou.drserver.model.dao.Room;
 import com.ikiningyou.drserver.model.dao.User;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationFullResponse;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationResponse;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationWithUserResponse;
 import com.ikiningyou.drserver.repository.CardRepository;
@@ -48,7 +49,7 @@ public class ReservationService {
   }
 
   public ReservationWithUserResponse[] getAllReservationWithUser() {
-    List<Reservation> reservations = reservationRepository.findAllReservations();
+    List<Reservation> reservations = reservationRepository.findAll();
     List<ReservationWithUserResponse> reservationList = new ArrayList<ReservationWithUserResponse>();
     for (Reservation reservation : reservations) {
       reservationList.add(
@@ -57,6 +58,19 @@ public class ReservationService {
     }
     return reservationList.toArray(
       new ReservationWithUserResponse[reservationList.size()]
+    );
+  }
+
+  public ReservationFullResponse[] getFullReservations() {
+    List<Reservation> reservations = reservationRepository.findAll();
+    List<ReservationFullResponse> reservationList = new ArrayList<ReservationFullResponse>();
+    for (Reservation reservation : reservations) {
+      reservationList.add(
+        ReservationBuilder.ReservationToReservationFullResponse(reservation)
+      );
+    }
+    return reservationList.toArray(
+      new ReservationFullResponse[reservationList.size()]
     );
   }
 

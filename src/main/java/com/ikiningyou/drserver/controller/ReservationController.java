@@ -2,6 +2,7 @@ package com.ikiningyou.drserver.controller;
 
 import com.ikiningyou.drserver.model.dao.Reservation;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationAddRequest;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationFullResponse;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationResponse;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationWithUserResponse;
 import com.ikiningyou.drserver.service.ReservationService;
@@ -33,12 +34,23 @@ public class ReservationController {
 
   @GetMapping("/list/user")
   public ResponseEntity<ReservationWithUserResponse[]> getAllReservationWithUser() {
-    ReservationWithUserResponse[] reservationlist = reservationService.getAllReservationWithUser();
+    ReservationWithUserResponse[] reservationList = reservationService.getAllReservationWithUser();
     HttpStatus statusCode = HttpStatus.OK;
-    if (reservationlist.length == 0) {
+    if (reservationList.length == 0) {
       statusCode = HttpStatus.NO_CONTENT;
     }
-    return ResponseEntity.status(statusCode).body(reservationlist);
+    return ResponseEntity.status(statusCode).body(reservationList);
+  }
+
+  @GetMapping("/list/full")
+  public ResponseEntity<ReservationFullResponse[]> getFullReservations() {
+    ReservationFullResponse[] reservationList = reservationService.getFullReservations();
+    HttpStatus statusCode = HttpStatus.OK;
+    if (reservationList.length == 0) {
+      statusCode = HttpStatus.NO_CONTENT;
+    }
+
+    return ResponseEntity.status(statusCode).body(reservationList);
   }
 
   @PostMapping
