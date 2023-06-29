@@ -43,15 +43,6 @@ public class Reservation {
   @JoinColumn(name = "room_id")
   private Room room;
 
-  // @Column(name = "client_id", nullable = false)
-  // private String clientId;
-
-  // @Column(name = "card_id", nullable = false)
-  // private String cardId;
-
-  // @Column(name = "room_id", nullable = false)
-  // private int roomId;
-
   @Column(name = "is_checked_in", nullable = true)
   private Boolean isCheckedIn;
 

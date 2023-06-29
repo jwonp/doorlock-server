@@ -15,6 +15,7 @@ public class ReservationBuilder {
       .userId(reservation.getUser().getId())
       .cardId(reservation.getCard().getId())
       .roomId(reservation.getRoom().getId())
+      .isCheckedIn(reservation.getIsCheckedIn())
       .build();
   }
 

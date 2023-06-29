@@ -14,4 +14,5 @@ public class ReservationResponse {
     private String userId;
     private int roomId;
     private String cardId;
+    private Boolean isCheckedIn;
 }
