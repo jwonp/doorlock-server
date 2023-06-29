@@ -2,6 +2,7 @@ package com.ikiningyou.drserver.service;
 
 import com.ikiningyou.drserver.model.dao.Room;
 import com.ikiningyou.drserver.model.dto.room.RoomResponse;
+import com.ikiningyou.drserver.model.dto.room.RoomWithReservation;
 import com.ikiningyou.drserver.repository.RoomRepository;
 import com.ikiningyou.drserver.util.builder.room.RoomBuilder;
 import java.util.ArrayList;
@@ -33,6 +34,15 @@ public class RoomService {
       roomList.add(RoomBuilder.RoomToRoomResponse(room));
     }
     return roomList.toArray(new RoomResponse[roomList.size()]);
+  }
+
+  public RoomWithReservation[] getRoomListWithReservation(){
+    List<Room> rooms = roomRepository.findAll();
+    List<RoomWithReservation> roomList = new ArrayList<RoomWithReservation>();
+    for(Room room : rooms){
+      roomList.add(RoomBuilder.RoomToRoomWithReservation(room));
+    }
+    return roomList.toArray(new RoomWithReservation[roomList.size()]);
   }
 
   public RoomResponse addRoom(String address) {

@@ -3,7 +3,9 @@ package com.ikiningyou.drserver.controller;
 import com.ikiningyou.drserver.model.dao.Room;
 import com.ikiningyou.drserver.model.dto.room.RoomAddRequest;
 import com.ikiningyou.drserver.model.dto.room.RoomResponse;
+import com.ikiningyou.drserver.model.dto.room.RoomWithReservation;
 import com.ikiningyou.drserver.service.RoomService;
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,9 @@ public class RoomController {
   RoomService roomService;
 
   @GetMapping
-  public ResponseEntity<RoomResponse> getRoomById(@RequestParam("id") int roomId) {
+  public ResponseEntity<RoomResponse> getRoomById(
+    @RequestParam("id") int roomId
+  ) {
     RoomResponse room = roomService.getRoomById(roomId);
     HttpStatus statusCode = HttpStatus.OK;
     if (room == null) {
@@ -39,6 +43,13 @@ public class RoomController {
       statusCode = HttpStatus.NO_CONTENT;
     }
     return ResponseEntity.status(statusCode).body(rooms);
+  }
+
+  @GetMapping("/list/reservation")
+  public ResponseEntity<RoomWithReservation[]> getRoomListWithReservation() {
+    RoomWithReservation[] roomList = roomService.getRoomListWithReservation();
+    HttpStatus statusCode = HttpStatus.OK;
+    return ResponseEntity.status(statusCode).body(roomList);
   }
 
   @PostMapping
