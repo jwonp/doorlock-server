@@ -61,6 +61,18 @@ public class ReservationService {
     );
   }
 
+  public ReservationFullResponse getFullReservation(Long id) {
+    Optional<Reservation> rowReservation = reservationRepository.findById(id);
+    if (rowReservation.isPresent() == false) {
+      return null;
+    }
+    ReservationFullResponse reservation = ReservationBuilder.ReservationToReservationFullResponse(
+      rowReservation.get()
+    );
+
+    return reservation;
+  }
+
   public ReservationFullResponse[] getFullReservations() {
     List<Reservation> reservations = reservationRepository.findAll();
     List<ReservationFullResponse> reservationList = new ArrayList<ReservationFullResponse>();
