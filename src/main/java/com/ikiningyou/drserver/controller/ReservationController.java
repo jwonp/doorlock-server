@@ -3,6 +3,7 @@ package com.ikiningyou.drserver.controller;
 import com.ikiningyou.drserver.model.dao.Reservation;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationAddRequest;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationFullResponse;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationModifyRequest;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationResponse;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationWithUserResponse;
 import com.ikiningyou.drserver.service.ReservationService;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -83,5 +85,24 @@ public class ReservationController {
       statusCode = HttpStatus.BAD_REQUEST;
     }
     return ResponseEntity.status(statusCode).body(savedReservation);
+  }
+
+  @PatchMapping
+  public ResponseEntity<Boolean> modifyReservation(
+    @RequestParam("id") Long id,
+    @RequestBody ReservationModifyRequest modifyRequest
+  ) throws Exception {
+    Reservation modifiedReservation = reservationService.modifyReservation(
+      id,
+      modifyRequest
+    );
+    Boolean returnBody = true;
+    HttpStatus statusCode = HttpStatus.OK;
+    if (modifiedReservation == null) {
+      statusCode = HttpStatus.BAD_REQUEST;
+      returnBody = false;
+    }
+
+    return ResponseEntity.status(statusCode).body(returnBody);
   }
 }

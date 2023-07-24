@@ -5,6 +5,7 @@ import com.ikiningyou.drserver.model.dao.Reservation;
 import com.ikiningyou.drserver.model.dao.Room;
 import com.ikiningyou.drserver.model.dao.User;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationFullResponse;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationModifyRequest;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationResponse;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationWithUserResponse;
 import com.ikiningyou.drserver.repository.CardRepository;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ReservationService {
@@ -118,5 +120,38 @@ public class ReservationService {
       e.printStackTrace();
     }
     return null;
+  }
+
+  @Transactional
+  public Reservation modifyReservation(Long id, ReservationModifyRequest data)
+    throws Exception {
+    Optional<Reservation> rowReservation = reservationRepository.findById(id);
+    if (rowReservation.isPresent() == false) {
+      return null;
+    }
+    Reservation reservation = rowReservation.get();
+    if (data.getUserId().isPresent()) {
+      User user = userRepository
+        .findById(data.getUserId().get())
+        .orElseThrow(() -> new Exception());
+
+      reservation.setUser(user);
+    }
+    if (data.getCardId().isPresent()) {
+      Card card = cardRepository
+        .findById(data.getCardId().get())
+        .orElseThrow(() -> new Exception());
+
+      reservation.setCard(card);
+    }
+    if (data.getRoomId().isPresent()) {
+      Room room = roomRepository
+        .findById(data.getRoomId().get())
+        .orElseThrow(() -> new Exception());
+
+      reservation.setRoom(room);
+    }
+
+    return reservation;
   }
 }
