@@ -9,9 +9,9 @@ import com.ikiningyou.drserver.repository.CardRepository;
 import com.ikiningyou.drserver.util.builder.card.CardBuilder;
 import com.ikiningyou.drserver.util.builder.card.TechTypeBuilder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -76,5 +76,15 @@ public class CardService {
       e.printStackTrace();
     }
     return null;
+  }
+
+  public boolean deleteCards(String[] cardIdList) {
+    try {
+      cardRepository.deleteAllByIdInQuery(Arrays.asList(cardIdList));
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+    return true;
   }
 }

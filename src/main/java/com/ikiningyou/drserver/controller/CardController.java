@@ -1,12 +1,14 @@
 package com.ikiningyou.drserver.controller;
 
 import com.ikiningyou.drserver.model.dto.card.CardAddRequest;
+import com.ikiningyou.drserver.model.dto.card.CardDeleteRequest;
 import com.ikiningyou.drserver.model.dto.card.CardResponse;
 import com.ikiningyou.drserver.model.dto.card.CardWithReservationResponse;
 import com.ikiningyou.drserver.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -65,5 +67,17 @@ public class CardController {
     }
 
     return ResponseEntity.status(statusCode).body(savedCard);
+  }
+
+  @DeleteMapping
+  public ResponseEntity<Boolean> deleteCard(
+    @RequestBody CardDeleteRequest request
+  ) {
+    Boolean isDeleted = cardService.deleteCards(request.getIdList());
+    HttpStatus statusCode = HttpStatus.OK;
+    if (isDeleted == false) {
+      statusCode = HttpStatus.BAD_REQUEST;
+    }
+    return ResponseEntity.status(statusCode).body(isDeleted);
   }
 }
