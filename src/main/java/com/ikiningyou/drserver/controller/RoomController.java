@@ -1,14 +1,14 @@
 package com.ikiningyou.drserver.controller;
 
-import com.ikiningyou.drserver.model.dao.Room;
 import com.ikiningyou.drserver.model.dto.room.RoomAddRequest;
+import com.ikiningyou.drserver.model.dto.room.RoomDeleteRequest;
 import com.ikiningyou.drserver.model.dto.room.RoomResponse;
 import com.ikiningyou.drserver.model.dto.room.RoomWithReservation;
 import com.ikiningyou.drserver.service.RoomService;
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,5 +62,17 @@ public class RoomController {
       statusCode = HttpStatus.BAD_REQUEST;
     }
     return ResponseEntity.status(statusCode).body(savedRoom);
+  }
+
+  @DeleteMapping
+  public ResponseEntity<Boolean> deleteRoom(
+    @RequestBody RoomDeleteRequest request
+  ) {
+    Boolean isDeleted = roomService.deleteRooms(request.getIdList());
+    HttpStatus statusCode = HttpStatus.OK;
+    if (isDeleted == false) {
+      statusCode = HttpStatus.BAD_REQUEST;
+    }
+    return ResponseEntity.status(statusCode).body(isDeleted);
   }
 }

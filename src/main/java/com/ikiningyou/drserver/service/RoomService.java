@@ -6,6 +6,7 @@ import com.ikiningyou.drserver.model.dto.room.RoomWithReservation;
 import com.ikiningyou.drserver.repository.RoomRepository;
 import com.ikiningyou.drserver.util.builder.room.RoomBuilder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +37,10 @@ public class RoomService {
     return roomList.toArray(new RoomResponse[roomList.size()]);
   }
 
-  public RoomWithReservation[] getRoomListWithReservation(){
+  public RoomWithReservation[] getRoomListWithReservation() {
     List<Room> rooms = roomRepository.findAll();
     List<RoomWithReservation> roomList = new ArrayList<RoomWithReservation>();
-    for(Room room : rooms){
+    for (Room room : rooms) {
       roomList.add(RoomBuilder.RoomToRoomWithReservation(room));
     }
     return roomList.toArray(new RoomWithReservation[roomList.size()]);
@@ -56,5 +57,15 @@ public class RoomService {
       e.printStackTrace();
     }
     return null;
+  }
+
+  public Boolean deleteRooms(Integer[] roomIdList) {
+    try {
+      roomRepository.deleteAllByIdInQuery(Arrays.asList(roomIdList));
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+    return true;
   }
 }
