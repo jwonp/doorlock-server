@@ -7,6 +7,7 @@ import com.ikiningyou.drserver.model.dto.user.UserWithReservationsResponse;
 import com.ikiningyou.drserver.repository.UserRepository;
 import com.ikiningyou.drserver.util.builder.user.UserBuilder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -87,6 +88,16 @@ public class UserService {
     }
     User user = rowUser.get();
     user.setLastTagged(lastTaggedTime);
+    return true;
+  }
+
+  public Boolean deleteUsers(String[] cardIdList) {
+    try {
+      userRepository.deleteAllByIdInQuery(Arrays.asList(cardIdList));
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
     return true;
   }
 }

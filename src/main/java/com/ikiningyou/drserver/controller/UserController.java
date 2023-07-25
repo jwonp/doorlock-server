@@ -2,6 +2,7 @@ package com.ikiningyou.drserver.controller;
 
 import com.ikiningyou.drserver.model.dto.reservation.ReservationWithUserResponse;
 import com.ikiningyou.drserver.model.dto.user.UserAddRequest;
+import com.ikiningyou.drserver.model.dto.user.UserDeleteRequest;
 import com.ikiningyou.drserver.model.dto.user.UserResponse;
 import com.ikiningyou.drserver.model.dto.user.UserUpdateLastTaggedResponse;
 import com.ikiningyou.drserver.model.dto.user.UserWithReservationsResponse;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -82,5 +84,17 @@ public class UserController {
       statusCode = HttpStatus.NOT_MODIFIED;
     }
     return ResponseEntity.status(statusCode).body(isUpdated);
+  }
+
+  @DeleteMapping
+  public ResponseEntity<Boolean> deleteUsers(
+    @RequestBody UserDeleteRequest request
+  ) {
+    Boolean isDeleted = userService.deleteUsers(request.getIdList());
+    HttpStatus statusCode = HttpStatus.OK;
+    if (isDeleted == false) {
+      statusCode = HttpStatus.BAD_REQUEST;
+    }
+    return ResponseEntity.status(statusCode).body(isDeleted);
   }
 }
