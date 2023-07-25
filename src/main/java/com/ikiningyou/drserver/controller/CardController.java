@@ -70,7 +70,7 @@ public class CardController {
   }
 
   @DeleteMapping
-  public ResponseEntity<Boolean> deleteCard(
+  public ResponseEntity<Boolean> deleteCards(
     @RequestBody CardDeleteRequest request
   ) {
     Boolean isDeleted = cardService.deleteCards(request.getIdList());
