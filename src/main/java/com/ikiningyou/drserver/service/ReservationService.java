@@ -14,6 +14,7 @@ import com.ikiningyou.drserver.repository.RoomRepository;
 import com.ikiningyou.drserver.repository.UserRepository;
 import com.ikiningyou.drserver.util.builder.reservation.ReservationBuilder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,5 +154,15 @@ public class ReservationService {
     }
 
     return reservation;
+  }
+
+  public Boolean deleteReservations (Long[] reservationIdList){
+    try {
+      reservationRepository.deleteAllByIdInQuery(Arrays.asList(reservationIdList));
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+    return true;
   }
 }

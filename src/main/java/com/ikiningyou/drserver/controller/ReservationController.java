@@ -2,14 +2,17 @@ package com.ikiningyou.drserver.controller;
 
 import com.ikiningyou.drserver.model.dao.Reservation;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationAddRequest;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationDeleteRequest;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationFullResponse;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationModifyRequest;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationResponse;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationWithUserResponse;
 import com.ikiningyou.drserver.service.ReservationService;
+import com.ikiningyou.drserver.util.builder.reservation.ReservationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -88,7 +91,7 @@ public class ReservationController {
   }
 
   @PatchMapping
-  public ResponseEntity<Boolean> modifyReservation(
+  public ResponseEntity<ReservationResponse> modifyReservation(
     @RequestParam("id") Long id,
     @RequestBody ReservationModifyRequest modifyRequest
   ) throws Exception {
@@ -96,13 +99,28 @@ public class ReservationController {
       id,
       modifyRequest
     );
-    Boolean returnBody = true;
+
     HttpStatus statusCode = HttpStatus.OK;
     if (modifiedReservation == null) {
       statusCode = HttpStatus.BAD_REQUEST;
-      returnBody = false;
     }
+    ReservationResponse modifiedReservationResponse = ReservationBuilder.ReservationToReservationResponse(
+      modifiedReservation
+    );
+    return ResponseEntity.status(statusCode).body(modifiedReservationResponse);
+  }
 
-    return ResponseEntity.status(statusCode).body(returnBody);
+  @DeleteMapping
+  public ResponseEntity<Boolean> deleteReservations(
+    @RequestBody ReservationDeleteRequest request
+  ) {
+    Boolean isDeleted = reservationService.deleteReservations(
+      request.getIdList()
+    );
+    HttpStatus statusCode = HttpStatus.OK;
+    if (isDeleted == null) {
+      statusCode = HttpStatus.BAD_REQUEST;
+    }
+    return ResponseEntity.status(statusCode).body(isDeleted);
   }
 }
