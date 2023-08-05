@@ -17,6 +17,7 @@ public class UserDetailService {
       .builder()
       .username(username)
       .password(password)
+      .role("USER")
       .build();
     try {
       UserDetail savedUserDetail = userDetailRepository.save(userDetail);
@@ -28,4 +29,5 @@ public class UserDetailService {
     }
     return null;
   }
+  
 }
