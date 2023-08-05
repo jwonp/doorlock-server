@@ -57,6 +57,9 @@ public class Card {
   @Column(name = "is_mifate_ultralight", nullable = false)
   private boolean isMifareUltralight;
 
+  @Column(name = "is_admin", nullable = false)
+  private boolean isAdmin;
+
   @OneToOne(mappedBy = "card")
   private Reservation reservation;
 }
