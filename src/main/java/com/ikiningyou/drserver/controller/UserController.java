@@ -3,9 +3,11 @@ package com.ikiningyou.drserver.controller;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationWithUserResponse;
 import com.ikiningyou.drserver.model.dto.user.UserAddRequest;
 import com.ikiningyou.drserver.model.dto.user.UserDeleteRequest;
+import com.ikiningyou.drserver.model.dto.user.UserModifyRequest;
 import com.ikiningyou.drserver.model.dto.user.UserResponse;
 import com.ikiningyou.drserver.model.dto.user.UserUpdateLastTaggedResponse;
 import com.ikiningyou.drserver.model.dto.user.UserWithReservationsResponse;
+import com.ikiningyou.drserver.service.UserDetailService;
 import com.ikiningyou.drserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,9 @@ public class UserController {
 
   @Autowired
   private UserService userService;
+
+  @Autowired
+  private UserDetailService userDetailService;
 
   @GetMapping
   public ResponseEntity<UserResponse> getUserById(
@@ -69,6 +74,37 @@ public class UserController {
       statusCode = HttpStatus.BAD_REQUEST;
     }
     return ResponseEntity.status(statusCode).body(savedUser);
+  }
+
+  @PatchMapping
+  public ResponseEntity<Boolean> modifyUser(
+    @RequestBody UserModifyRequest request
+  ) {
+    String userId = request.getId();
+    HttpStatus status = HttpStatus.OK;
+
+    boolean isPasswordModified = true;
+    boolean isNameModified = true;
+    boolean isPhoneModified = true;
+
+    boolean isSuccess = true;
+    if (request.getPassword().isPresent()) {
+      String password = request.getPassword().get();
+      isPasswordModified = userDetailService.modifyPassword(userId, password);
+    }
+    if (request.getName().isPresent()) {
+      String name = request.getName().get();
+      isNameModified = userService.modifyUserName(userId, name);
+    }
+    if (request.getPhone().isPresent()) {
+      String phone = request.getPhone().get();
+      isPhoneModified = userService.modifyUserPhone(userId, phone);
+    }
+    if (!isPasswordModified || !isNameModified || !isPhoneModified) {
+      status = HttpStatus.BAD_REQUEST;
+      isSuccess = false;
+    }
+    return ResponseEntity.status(status).body(isSuccess);
   }
 
   @PatchMapping("/tag/last")

@@ -91,6 +91,28 @@ public class UserService {
     return true;
   }
 
+  @Transactional
+  public boolean modifyUserName(String id, String name) {
+    Optional<User> rowUser = userRepository.findById(id);
+    if (rowUser.isPresent() == false) {
+      return false;
+    }
+    User user = rowUser.get();
+    user.setName(name);
+    return true;
+  }
+
+  @Transactional
+  public boolean modifyUserPhone(String id, String phone) {
+    Optional<User> rowUser = userRepository.findById(id);
+    if (rowUser.isPresent() == false) {
+      return false;
+    }
+    User user = rowUser.get();
+    user.setName(phone);
+    return true;
+  }
+
   public Boolean deleteUsers(String[] cardIdList) {
     try {
       userRepository.deleteAllByIdInQuery(Arrays.asList(cardIdList));
