@@ -1,17 +1,14 @@
 package com.ikiningyou.drserver.controller;
 
-import com.ikiningyou.drserver.model.dto.reservation.ReservationWithUserResponse;
 import com.ikiningyou.drserver.model.dto.user.UserAddRequest;
 import com.ikiningyou.drserver.model.dto.user.UserDeleteRequest;
 import com.ikiningyou.drserver.model.dto.user.UserModifyRequest;
 import com.ikiningyou.drserver.model.dto.user.UserResponse;
-import com.ikiningyou.drserver.model.dto.user.UserUpdateLastTaggedResponse;
 import com.ikiningyou.drserver.model.dto.user.UserWithReservationsResponse;
 import com.ikiningyou.drserver.service.UserDetailService;
 import com.ikiningyou.drserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -105,21 +102,6 @@ public class UserController {
       isSuccess = false;
     }
     return ResponseEntity.status(status).body(isSuccess);
-  }
-
-  @PatchMapping("/tag/last")
-  public ResponseEntity<Boolean> updateLastTaggedTime(
-    @RequestBody UserUpdateLastTaggedResponse response
-  ) {
-    boolean isUpdated = userService.updateLastTaggedTime(
-      response.getUserId(),
-      response.getLastTagged()
-    );
-    HttpStatusCode statusCode = HttpStatus.OK;
-    if (isUpdated == false) {
-      statusCode = HttpStatus.NOT_MODIFIED;
-    }
-    return ResponseEntity.status(statusCode).body(isUpdated);
   }
 
   @DeleteMapping

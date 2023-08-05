@@ -1,6 +1,7 @@
 package com.ikiningyou.drserver.service;
 
 import com.ikiningyou.drserver.model.dao.Card;
+import com.ikiningyou.drserver.model.dao.User;
 import com.ikiningyou.drserver.model.data.TechType;
 import com.ikiningyou.drserver.model.dto.card.CardAddRequest;
 import com.ikiningyou.drserver.model.dto.card.CardResponse;
@@ -11,11 +12,13 @@ import com.ikiningyou.drserver.util.builder.card.CardBuilder;
 import com.ikiningyou.drserver.util.builder.card.TechTypeBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CardService {
@@ -88,7 +91,16 @@ public class CardService {
     }
     return true;
   }
-
+  @Transactional
+  public boolean updateLastTaggedTime(String userId, Date lastTaggedTime) {
+    Optional<Card> rowCard = cardRepository.findById(userId);
+    if (rowCard.isPresent() == false) {
+      return false;
+    }
+    Card card = rowCard.get();
+    card.setLastTagged(lastTaggedTime);
+    return true;
+  }
   public String authorizeCard(String cardId) {
     Optional<Card> card = cardRepository.findById(cardId);
     if (card.isPresent() == false) {

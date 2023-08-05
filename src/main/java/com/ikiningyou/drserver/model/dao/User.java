@@ -32,8 +32,6 @@ public class User {
   @Column(name = "phone", nullable = false)
   private String phone;
 
-  @Column(name = "last_tagged", nullable = true)
-  private Date lastTagged;
 
   @OneToMany(mappedBy = "user")
   private List<Reservation> reservations;

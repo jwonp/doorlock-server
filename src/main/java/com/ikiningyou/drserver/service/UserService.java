@@ -80,16 +80,7 @@ public class UserService {
     return null;
   }
 
-  @Transactional
-  public boolean updateLastTaggedTime(String userId, Date lastTaggedTime) {
-    Optional<User> rowUser = userRepository.findById(userId);
-    if (rowUser.isPresent() == false) {
-      return false;
-    }
-    User user = rowUser.get();
-    user.setLastTagged(lastTaggedTime);
-    return true;
-  }
+
 
   @Transactional
   public boolean modifyUserName(String id, String name) {

@@ -13,7 +13,6 @@ public class UserBuilder {
       .id(user.getId())
       .name(user.getName())
       .phone(user.getPhone())
-      .lastTagged(user.getLastTagged())
       .build();
   }
 
@@ -25,7 +24,6 @@ public class UserBuilder {
       .id(user.getId())
       .name(user.getName())
       .phone(user.getPhone())
-      .lastTagged(user.getLastTagged())
       .reservations(
         ReservationIdsBuilder.ReservationsToReservationWithoutUserIdArray(
           user.getReservations()

@@ -5,13 +5,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Builder
 @Entity
+@Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -59,6 +62,9 @@ public class Card {
 
   @Column(name = "is_admin", nullable = false)
   private boolean isAdmin;
+
+  @Column(name = "last_tagged", nullable = true)
+  private Date lastTagged;
 
   @OneToOne(mappedBy = "card")
   private Reservation reservation;

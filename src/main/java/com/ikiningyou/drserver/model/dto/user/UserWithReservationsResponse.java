@@ -1,11 +1,9 @@
 package com.ikiningyou.drserver.model.dto.user;
 
-import java.util.Date;
-
 import com.ikiningyou.drserver.model.dao.Reservation;
 import com.ikiningyou.drserver.model.data.reservation.ReservationWithoutUserId;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationResponse;
-
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +18,6 @@ public class UserWithReservationsResponse {
   private String id;
   private String name;
   private String phone;
-  private Date lastTagged;
-  private ReservationWithoutUserId[] reservations;
 
+  private ReservationWithoutUserId[] reservations;
 }
