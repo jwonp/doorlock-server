@@ -6,6 +6,7 @@ import com.ikiningyou.drserver.model.dto.card.CardAddRequest;
 import com.ikiningyou.drserver.model.dto.card.CardResponse;
 import com.ikiningyou.drserver.model.dto.card.CardWithReservationResponse;
 import com.ikiningyou.drserver.repository.CardRepository;
+import com.ikiningyou.drserver.util.Strings;
 import com.ikiningyou.drserver.util.builder.card.CardBuilder;
 import com.ikiningyou.drserver.util.builder.card.TechTypeBuilder;
 import java.util.ArrayList;
@@ -86,5 +87,16 @@ public class CardService {
       return false;
     }
     return true;
+  }
+
+  public String authorizeCard(String cardId) {
+    Optional<Card> card = cardRepository.findById(cardId);
+    if (card.isPresent() == false) {
+      return Strings.CARD_UNAUTHORIZED;
+    }
+    if (card.get().isAdmin()) {
+      return Strings.CARD_ADMIN;
+    }
+    return Strings.CARD_AUTHORIZED;
   }
 }
