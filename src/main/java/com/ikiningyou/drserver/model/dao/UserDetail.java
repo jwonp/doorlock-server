@@ -25,11 +25,6 @@ public class UserDetail {
   @Column(name = "password", nullable = false)
   private String password;
 
-  @Column(name = "role", nullable = true)
+  @Column(name = "role", nullable = false)
   private String role;
-
-  @PrePersist
-  void preSetRole() {
-    this.role = "USER";
-  }
 }
