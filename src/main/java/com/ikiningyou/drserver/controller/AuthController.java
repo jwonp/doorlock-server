@@ -21,7 +21,10 @@ public class AuthController {
   public ResponseEntity<AuthAuthorizeCardResponse> authorizeTaggedCard(
     @RequestParam("id") String cardId
   ) {
-    AuthAuthorizeCardResponse result = cardService.authorizeCard(cardId);
+    AuthAuthorizeCardResponse result = AuthAuthorizeCardResponse
+      .builder()
+      .result(cardService.authorizeCard(cardId))
+      .build();
     HttpStatus status = HttpStatus.OK;
     return ResponseEntity.status(status).body(result);
   }

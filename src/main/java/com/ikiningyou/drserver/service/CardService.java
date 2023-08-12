@@ -104,16 +104,15 @@ public class CardService {
     return true;
   }
 
-  public AuthAuthorizeCardResponse authorizeCard(String cardId) {
+  public String authorizeCard(String cardId) {
     Optional<Card> card = cardRepository.findById(cardId);
-    String result = "";
+
     if (card.isPresent() == false) {
-      result = Strings.CARD_UNAUTHORIZED;
+      return Strings.CARD_UNAUTHORIZED;
     }
     if (card.get().isAdmin()) {
-      result = Strings.CARD_ADMIN;
+      return Strings.CARD_ADMIN;
     }
-    result = Strings.CARD_AUTHORIZED;
-    return AuthAuthorizeCardResponse.builder().result(result).build();
+    return Strings.CARD_AUTHORIZED;
   }
 }
