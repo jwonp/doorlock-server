@@ -1,5 +1,6 @@
 package com.ikiningyou.drserver.controller;
 
+import com.ikiningyou.drserver.model.dto.auth.AuthAuthorizeCardResponse;
 import com.ikiningyou.drserver.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,10 +18,10 @@ public class AuthController {
   private CardService cardService;
 
   @GetMapping("/card")
-  public ResponseEntity<String> authorizeTaggedCard(
+  public ResponseEntity<AuthAuthorizeCardResponse> authorizeTaggedCard(
     @RequestParam("id") String cardId
   ) {
-    String result = cardService.authorizeCard(cardId);
+    AuthAuthorizeCardResponse result = cardService.authorizeCard(cardId);
     HttpStatus status = HttpStatus.OK;
     return ResponseEntity.status(status).body(result);
   }

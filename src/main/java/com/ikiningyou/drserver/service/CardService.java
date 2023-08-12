@@ -3,6 +3,7 @@ package com.ikiningyou.drserver.service;
 import com.ikiningyou.drserver.model.dao.Card;
 import com.ikiningyou.drserver.model.dao.User;
 import com.ikiningyou.drserver.model.data.TechType;
+import com.ikiningyou.drserver.model.dto.auth.AuthAuthorizeCardResponse;
 import com.ikiningyou.drserver.model.dto.card.CardAddRequest;
 import com.ikiningyou.drserver.model.dto.card.CardResponse;
 import com.ikiningyou.drserver.model.dto.card.CardWithReservationResponse;
@@ -91,6 +92,7 @@ public class CardService {
     }
     return true;
   }
+
   @Transactional
   public boolean updateLastTaggedTime(String userId, Date lastTaggedTime) {
     Optional<Card> rowCard = cardRepository.findById(userId);
@@ -101,14 +103,17 @@ public class CardService {
     card.setLastTagged(lastTaggedTime);
     return true;
   }
-  public String authorizeCard(String cardId) {
+
+  public AuthAuthorizeCardResponse authorizeCard(String cardId) {
     Optional<Card> card = cardRepository.findById(cardId);
+    String result = "";
     if (card.isPresent() == false) {
-      return Strings.CARD_UNAUTHORIZED;
+      result = Strings.CARD_UNAUTHORIZED;
     }
     if (card.get().isAdmin()) {
-      return Strings.CARD_ADMIN;
+      result = Strings.CARD_ADMIN;
     }
-    return Strings.CARD_AUTHORIZED;
+    result = Strings.CARD_AUTHORIZED;
+    return AuthAuthorizeCardResponse.builder().result(result).build();
   }
 }
