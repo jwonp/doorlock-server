@@ -61,6 +61,18 @@ public class UserController {
     return ResponseEntity.status(statusCode).body(userList);
   }
 
+  @GetMapping("/search")
+  public ResponseEntity<UserWithReservationsResponse[]> searchUserById(
+    @RequestParam("id") String id
+  ) {
+    UserWithReservationsResponse[] userList = userService.searchUserById(id);
+    HttpStatus statusCode = HttpStatus.OK;
+    if (userList.length == 0) {
+      statusCode = HttpStatus.NO_CONTENT;
+    }
+    return ResponseEntity.status(statusCode).body(userList);
+  }
+
   @PostMapping
   public ResponseEntity<UserResponse> addUser(
     @RequestBody UserAddRequest user

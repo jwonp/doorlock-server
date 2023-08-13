@@ -68,4 +68,13 @@ public class RoomService {
     }
     return true;
   }
+
+  public RoomWithReservation[] searchRoomByAddress(String address) {
+    List<Room> searchedRooms = roomRepository.findByAddressContaining(address);
+    List<RoomWithReservation> roomList = new ArrayList<RoomWithReservation>();
+    for (Room room : searchedRooms) {
+      roomList.add(RoomBuilder.RoomToRoomWithReservation(room));
+    }
+    return roomList.toArray(new RoomWithReservation[roomList.size()]);
+  }
 }

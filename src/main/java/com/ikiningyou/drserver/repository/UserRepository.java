@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<User, String> {
   @Modifying
   @Query("delete from User where id in :ids")
   void deleteAllByIdInQuery(@Param("ids") List<String> ids);
+
+  List<User> findByIdContaining(String id);
 }

@@ -115,4 +115,14 @@ public class CardService {
     }
     return Strings.CARD_AUTHORIZED;
   }
+
+  public CardWithReservationResponse[] searchCardById(String id) {
+    List<Card> searchedCards = cardRepository.findByIdContaining(id);
+    List<CardWithReservationResponse> cardList = new ArrayList<CardWithReservationResponse>();
+    for (Card card : searchedCards) {
+      cardList.add(CardBuilder.CardToCardWithReservationResponse(card));
+    }
+
+    return cardList.toArray(new CardWithReservationResponse[cardList.size()]);
+  }
 }

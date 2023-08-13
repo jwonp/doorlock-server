@@ -13,4 +13,6 @@ public interface RoomRepository extends JpaRepository<Room, Integer> {
   @Modifying
   @Query("delete from Room where id in :ids")
   void deleteAllByIdInQuery(@Param("ids") List<Integer> ids);
+
+  List<Room> findByAddressContaining(String address);
 }

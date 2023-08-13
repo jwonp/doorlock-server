@@ -80,8 +80,6 @@ public class UserService {
     return null;
   }
 
-
-
   @Transactional
   public boolean modifyUserName(String id, String name) {
     Optional<User> rowUser = userRepository.findById(id);
@@ -112,5 +110,15 @@ public class UserService {
       return false;
     }
     return true;
+  }
+
+  public UserWithReservationsResponse[] searchUserById(String id) {
+    List<User> searchedUsers = userRepository.findByIdContaining(id);
+    List<UserWithReservationsResponse> userList = new ArrayList<UserWithReservationsResponse>();
+
+    for (User user : searchedUsers) {
+      userList.add(UserBuilder.UserToUserWithReservationsResponse(user));
+    }
+    return userList.toArray(new UserWithReservationsResponse[userList.size()]);
   }
 }

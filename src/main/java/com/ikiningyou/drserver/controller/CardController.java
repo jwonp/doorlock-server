@@ -55,6 +55,18 @@ public class CardController {
     return ResponseEntity.status(statusCode).body(cardList);
   }
 
+  @GetMapping("/search")
+  public ResponseEntity<CardWithReservationResponse[]> searchCardById(
+    @RequestParam("id") String id
+  ) {
+    CardWithReservationResponse[] cardList = cardService.searchCardById(id);
+    HttpStatus statusCode = HttpStatus.OK;
+    if (cardList.length == 0) {
+      statusCode = HttpStatus.NO_CONTENT;
+    }
+    return ResponseEntity.status(statusCode).body(cardList);
+  }
+
   @PostMapping
   public ResponseEntity<CardResponse> addCard(
     @RequestBody CardAddRequest card

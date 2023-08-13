@@ -52,6 +52,15 @@ public class RoomController {
     return ResponseEntity.status(statusCode).body(roomList);
   }
 
+  @GetMapping("/search")
+  public ResponseEntity<RoomWithReservation[]> searchRoomByAddress(
+    @RequestParam("address") String address
+  ) {
+    RoomWithReservation[] roomList = roomService.searchRoomByAddress(address);
+    HttpStatus statusCode = HttpStatus.OK;
+    return ResponseEntity.status(statusCode).body(roomList);
+  }
+
   @PostMapping
   public ResponseEntity<RoomResponse> addRoom(
     @RequestBody RoomAddRequest roomAddRequest
