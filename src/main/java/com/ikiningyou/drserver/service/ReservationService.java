@@ -156,13 +156,28 @@ public class ReservationService {
     return reservation;
   }
 
-  public Boolean deleteReservations (Long[] reservationIdList){
+  public Boolean deleteReservations(Long[] reservationIdList) {
     try {
-      reservationRepository.deleteAllByIdInQuery(Arrays.asList(reservationIdList));
+      reservationRepository.deleteAllByIdInQuery(
+        Arrays.asList(reservationIdList)
+      );
     } catch (Exception e) {
       e.printStackTrace();
       return false;
     }
+    return true;
+  }
+
+  @Transactional
+  public boolean setCheckIn(Long reservationId, boolean checkIn) {
+    Optional<Reservation> rowReservation = reservationRepository.findById(
+      reservationId
+    );
+    if (rowReservation.isPresent() == false) {
+      return false;
+    }
+    Reservation reservation = rowReservation.get();
+    reservation.setIsCheckedIn(checkIn);
     return true;
   }
 }

@@ -2,6 +2,7 @@ package com.ikiningyou.drserver.controller;
 
 import com.ikiningyou.drserver.model.dao.Reservation;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationAddRequest;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationCheckInRequest;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationDeleteRequest;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationFullResponse;
 import com.ikiningyou.drserver.model.dto.reservation.ReservationModifyRequest;
@@ -108,6 +109,21 @@ public class ReservationController {
       modifiedReservation
     );
     return ResponseEntity.status(statusCode).body(modifiedReservationResponse);
+  }
+
+  @PatchMapping("/checkin")
+  public ResponseEntity<Boolean> setCheckIn(
+    @RequestBody ReservationCheckInRequest request
+  ) {
+    Boolean isChanged = reservationService.setCheckIn(
+      request.getReservationId(),
+      request.isCheckIn()
+    );
+    HttpStatus status = HttpStatus.OK;
+    if (isChanged == false) {
+      status = HttpStatus.NOT_ACCEPTABLE;
+    }
+    return ResponseEntity.status(status).body(isChanged);
   }
 
   @DeleteMapping
