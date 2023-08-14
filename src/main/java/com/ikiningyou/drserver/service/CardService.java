@@ -1,9 +1,7 @@
 package com.ikiningyou.drserver.service;
 
 import com.ikiningyou.drserver.model.dao.Card;
-import com.ikiningyou.drserver.model.dao.User;
 import com.ikiningyou.drserver.model.data.TechType;
-import com.ikiningyou.drserver.model.dto.auth.AuthAuthorizeCardResponse;
 import com.ikiningyou.drserver.model.dto.card.CardAddRequest;
 import com.ikiningyou.drserver.model.dto.card.CardResponse;
 import com.ikiningyou.drserver.model.dto.card.CardWithReservationResponse;
@@ -11,9 +9,9 @@ import com.ikiningyou.drserver.repository.CardRepository;
 import com.ikiningyou.drserver.util.Strings;
 import com.ikiningyou.drserver.util.builder.card.CardBuilder;
 import com.ikiningyou.drserver.util.builder.card.TechTypeBuilder;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,22 +92,13 @@ public class CardService {
   }
 
   @Transactional
-  public boolean updateLastTaggedTime(String userId, Date lastTaggedTime) {
-    Optional<Card> rowCard = cardRepository.findById(userId);
-    if (rowCard.isPresent() == false) {
-      return false;
-    }
-    Card card = rowCard.get();
-    card.setLastTagged(lastTaggedTime);
-    return true;
-  }
-
   public String authorizeCard(String cardId) {
     Optional<Card> card = cardRepository.findById(cardId);
 
     if (card.isPresent() == false) {
       return Strings.CARD_UNAUTHORIZED;
     }
+    card.get().setLastTagged(LocalDateTime.now());
     if (card.get().isAdmin()) {
       return Strings.CARD_ADMIN;
     }

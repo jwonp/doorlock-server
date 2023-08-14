@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.util.Date;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -64,7 +64,7 @@ public class Card {
   private boolean isAdmin;
 
   @Column(name = "last_tagged", nullable = true)
-  private Date lastTagged;
+  private LocalDateTime lastTagged;
 
   @OneToOne(mappedBy = "card")
   private Reservation reservation;
