@@ -1,5 +1,6 @@
 package com.ikiningyou.drserver.model.dto.card;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.ikiningyou.drserver.model.data.TechType;
@@ -18,5 +19,5 @@ public class CardResponse {
   private int maxSize;
   private String type;
   private TechType techType;
-  private Date lastTagged;
+  private LocalDateTime lastTagged;
 }

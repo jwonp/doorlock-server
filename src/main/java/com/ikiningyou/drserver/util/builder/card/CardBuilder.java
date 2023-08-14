@@ -14,6 +14,7 @@ public class CardBuilder {
       .id(card.getId())
       .maxSize(card.getMaxSize())
       .type(card.getType())
+      .lastTagged(card.getLastTagged())
       .techType(TechTypeBuilder.CardtoTechType(card))
       .build();
   }
@@ -26,6 +27,7 @@ public class CardBuilder {
       .id(card.getId())
       .maxSize(card.getMaxSize())
       .type(card.getType())
+      .lastTagged(card.getLastTagged())
       .techType(TechTypeBuilder.CardtoTechType(card))
       .reservationId(
         card.getReservation() == null ? 0l : card.getReservation().getId()

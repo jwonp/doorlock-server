@@ -1,6 +1,7 @@
 package com.ikiningyou.drserver.model.dto.card;
 
 import com.ikiningyou.drserver.model.data.TechType;
+import java.time.LocalDateTime;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +18,7 @@ public class CardWithReservationResponse {
   private int maxSize;
   private String type;
   private TechType techType;
-  private Date lastTagged;
+  private LocalDateTime lastTagged;
   private Long reservationId;
   private String userId;
   private int roomId;
