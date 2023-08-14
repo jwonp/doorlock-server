@@ -56,6 +56,7 @@ public class CardService {
           .builder()
           .id(card.getId())
           .maxSize(card.getMaxSize())
+          .lastTagged(card.getLastTagged())
           .type(card.getType())
           .techType(techType)
           .build()
