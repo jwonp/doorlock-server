@@ -4,6 +4,7 @@ import com.ikiningyou.drserver.model.dto.auth.AuthAuthorizeCardRequest;
 import com.ikiningyou.drserver.model.dto.auth.AuthAuthorizeCardResponse;
 import com.ikiningyou.drserver.service.AuthService;
 import com.ikiningyou.drserver.service.CardService;
+import com.ikiningyou.drserver.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,16 +28,22 @@ public class AuthController {
   public ResponseEntity<AuthAuthorizeCardResponse> authorizeTaggedCard(
     @RequestBody AuthAuthorizeCardRequest request
   ) {
+    String AuthorizedResult = cardService.authorizeCard(request.getCardId());
+    HttpStatus status = HttpStatus.OK;
+    if (AuthorizedResult == Strings.CARD_LOST) {
+      status = HttpStatus.UNAUTHORIZED;
+    } 
     AuthAuthorizeCardResponse result = AuthAuthorizeCardResponse
       .builder()
-      .result(cardService.authorizeCard(request.getCardId()))
+      .result(AuthorizedResult)
       .build();
+      
     authService.addTagLog(
       request.getCardId(),
       result.getResult(),
       request.getAddress()
     );
-    HttpStatus status = HttpStatus.OK;
+
     return ResponseEntity.status(status).body(result);
   }
 }

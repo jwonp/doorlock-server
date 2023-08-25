@@ -1,14 +1,18 @@
 package com.ikiningyou.drserver.service;
 
 import com.ikiningyou.drserver.model.dao.Card;
+import com.ikiningyou.drserver.model.dao.LostCard;
 import com.ikiningyou.drserver.model.data.TechType;
 import com.ikiningyou.drserver.model.dto.card.CardAddRequest;
 import com.ikiningyou.drserver.model.dto.card.CardResponse;
 import com.ikiningyou.drserver.model.dto.card.CardWithReservationResponse;
+import com.ikiningyou.drserver.model.dto.lostCard.LostCardListResponse;
 import com.ikiningyou.drserver.repository.CardRepository;
+import com.ikiningyou.drserver.repository.LostCardRepository;
 import com.ikiningyou.drserver.util.Strings;
 import com.ikiningyou.drserver.util.builder.card.CardBuilder;
 import com.ikiningyou.drserver.util.builder.card.TechTypeBuilder;
+import com.ikiningyou.drserver.util.builder.lostCard.LostCardBuilder;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +28,9 @@ public class CardService {
 
   @Autowired
   private CardRepository cardRepository;
+
+  @Autowired
+  private LostCardRepository lostCardRepository;
 
   public CardResponse getCardById(String userId) {
     Optional<Card> rowCard = cardRepository.findById(userId);
@@ -94,6 +101,11 @@ public class CardService {
 
   @Transactional
   public String authorizeCard(String cardId) {
+    Optional<LostCard> rowLostCard = lostCardRepository.findById(cardId);
+    if (rowLostCard.isPresent()) {
+      return Strings.CARD_LOST;
+    }
+
     Optional<Card> card = cardRepository.findById(cardId);
 
     if (card.isPresent() == false) {
@@ -114,5 +126,36 @@ public class CardService {
     }
 
     return cardList.toArray(new CardWithReservationResponse[cardList.size()]);
+  }
+
+  public LostCardListResponse[] getAllLostCards() {
+    List<LostCard> lostCards = lostCardRepository.findAll();
+    List<LostCardListResponse> lostCardList = new ArrayList<LostCardListResponse>();
+    for (LostCard lostCard : lostCards) {
+      lostCardList.add(
+        LostCardBuilder.LostCardToLostCardListResponse(lostCard)
+      );
+    }
+
+    return lostCardList.toArray(new LostCardListResponse[lostCardList.size()]);
+  }
+
+  public LostCard addLostCard(String lostCardId) {
+    Optional<Card> rowLostCard = cardRepository.findById(lostCardId);
+    if (rowLostCard.isPresent() == false) {
+      return null;
+    }
+    LostCard lostCard = LostCard.builder().card(rowLostCard.get()).build();
+    try {
+      LostCard savedLostCard = lostCardRepository.save(lostCard);
+      return savedLostCard;
+    } catch (IllegalArgumentException e) {
+      e.printStackTrace();
+    } catch (OptimisticLockingFailureException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }
