@@ -2,8 +2,11 @@ package com.ikiningyou.drserver.model.dao;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +35,10 @@ public class User {
   @Column(name = "phone", nullable = false)
   private String phone;
 
-
   @OneToMany(mappedBy = "user")
   private List<Reservation> reservations;
+
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "username", updatable = true)
+  private UserDetail userDetail;
 }

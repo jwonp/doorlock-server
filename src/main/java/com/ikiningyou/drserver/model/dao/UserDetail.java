@@ -2,8 +2,12 @@ package com.ikiningyou.drserver.model.dao;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +30,9 @@ public class UserDetail {
   @Column(name = "password", nullable = false)
   private String password;
 
-  @Column(name = "role", nullable = false)
-  private String role;
+  @OneToMany(mappedBy = "userDetail", fetch = FetchType.EAGER)
+  private List<Authority> authorities;
+
+  @OneToOne(mappedBy = "userDetail")
+  private User user;
 }
