@@ -13,8 +13,11 @@ public interface ReservationRepository
   @Query("SELECT A from Reservation A JOIN FETCH A.user")
   List<Reservation> findAllReservations();
 
+
   @Transactional
   @Modifying
   @Query("delete from Reservation where id in :ids")
   void deleteAllByIdInQuery(@Param("ids") List<Long> ids);
+
+  
 }

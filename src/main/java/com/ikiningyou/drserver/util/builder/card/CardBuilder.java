@@ -1,9 +1,13 @@
 package com.ikiningyou.drserver.util.builder.card;
 
 import com.ikiningyou.drserver.model.dao.Card;
-import com.ikiningyou.drserver.model.dto.card.CardAddRequest;
-import com.ikiningyou.drserver.model.dto.card.CardResponse;
-import com.ikiningyou.drserver.model.dto.card.CardWithReservationResponse;
+import com.ikiningyou.drserver.model.data.card.web.CardWithReservationOnIndex.CardWithReservationOnIndex;
+import com.ikiningyou.drserver.model.data.card.web.CardWithReservationOnIndex.ReservationDetail;
+import com.ikiningyou.drserver.model.dto.card.mobile.CardAddRequest;
+import com.ikiningyou.drserver.model.dto.card.mobile.CardResponse;
+import com.ikiningyou.drserver.model.dto.card.mobile.CardWithReservationResponse;
+import com.ikiningyou.drserver.model.dto.card.web.CardAdminDetailResponse;
+import com.ikiningyou.drserver.model.dto.card.web.CardWithReservationOnIndexResponse;
 import com.ikiningyou.drserver.util.NfcCardTechTypeParser;
 
 public class CardBuilder {
@@ -64,6 +68,51 @@ public class CardBuilder {
       .isMifareUltralight(
         techTypeFlags[NfcCardTechTypeParser.IS_MIFARE_ULTRA_LIGHT]
       )
+      .build();
+  }
+
+  public static CardWithReservationOnIndexResponse CardWithReservationOnIndexToCardWithReservationOnIndexResponse(
+    CardWithReservationOnIndex card
+  ) {
+    return CardWithReservationOnIndexResponse
+      .builder()
+      .cardId(card.getCardId())
+      .reservation(
+        ReservationDetail
+          .builder()
+          .reservationId(card.getreservationId())
+          .name(card.getName())
+          .userId(card.getUserId())
+          .phone(card.getPhone())
+          .address(card.getAddress())
+          .build()
+      )
+      .lastTagged(card.getLastTagged())
+      .build();
+  }
+
+  public static CardAdminDetailResponse CardToCardAdminDetailResponse(Card card) {
+    if (card.getReservation() == null) {
+      return CardAdminDetailResponse
+        .builder()
+        .cardId(card.getId())
+        .lastTagged(card.getLastTagged())
+        .build();
+    }
+    return CardAdminDetailResponse
+      .builder()
+      .cardId(card.getId())
+      .reservation(
+        ReservationDetail
+          .builder()
+          .reservationId(card.getReservation().getId())
+          .name(card.getReservation().getUser().getName())
+          .userId(card.getReservation().getUser().getId())
+          .phone(card.getReservation().getUser().getPhone())
+          .address(card.getReservation().getRoom().getAddress())
+          .build()
+      )
+      .lastTagged(card.getLastTagged())
       .build();
   }
 }

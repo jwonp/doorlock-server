@@ -1,9 +1,10 @@
 package com.ikiningyou.drserver.util.builder.reservation;
 
 import com.ikiningyou.drserver.model.dao.Reservation;
-import com.ikiningyou.drserver.model.dto.reservation.ReservationFullResponse;
-import com.ikiningyou.drserver.model.dto.reservation.ReservationResponse;
-import com.ikiningyou.drserver.model.dto.reservation.ReservationWithUserResponse;
+import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationFullResponse;
+import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationResponse;
+import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationWithUserResponse;
+import com.ikiningyou.drserver.model.dto.reservation.web.ReservationAdminResponse;
 
 public class ReservationBuilder {
 
@@ -47,6 +48,20 @@ public class ReservationBuilder {
       .roomId(reservation.getRoom().getId())
       .address(reservation.getRoom().getAddress())
       .isCheckedIn(reservation.getIsCheckedIn())
+      .build();
+  }
+
+  public static ReservationAdminResponse ReservationToReservationAdminResponse(
+    Reservation reservation
+  ) {
+    return ReservationAdminResponse
+      .builder()
+      .reservationId(reservation.getId())
+      .name(reservation.getUser().getName())
+      .userId(reservation.getUser().getId())
+      .phone(reservation.getUser().getPhone())
+      .cardId(reservation.getCard().getId())
+      .address(reservation.getRoom().getAddress())
       .build();
   }
 }

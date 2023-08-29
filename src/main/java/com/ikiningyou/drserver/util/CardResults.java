@@ -1,6 +1,6 @@
 package com.ikiningyou.drserver.util;
 
-public class Strings {
+public class CardResults {
 
   public static final String CARD_LOST = "LOST";
   public static final String CARD_ADMIN = "ADMIN";

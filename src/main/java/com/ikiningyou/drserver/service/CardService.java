@@ -3,13 +3,17 @@ package com.ikiningyou.drserver.service;
 import com.ikiningyou.drserver.model.dao.Card;
 import com.ikiningyou.drserver.model.dao.LostCard;
 import com.ikiningyou.drserver.model.data.TechType;
-import com.ikiningyou.drserver.model.dto.card.CardAddRequest;
-import com.ikiningyou.drserver.model.dto.card.CardResponse;
-import com.ikiningyou.drserver.model.dto.card.CardWithReservationResponse;
-import com.ikiningyou.drserver.model.dto.lostCard.LostCardListResponse;
+import com.ikiningyou.drserver.model.data.card.web.CardWithReservationOnIndex.CardWithReservationOnIndex;
+import com.ikiningyou.drserver.model.dto.card.mobile.CardAddRequest;
+import com.ikiningyou.drserver.model.dto.card.mobile.CardResponse;
+import com.ikiningyou.drserver.model.dto.card.mobile.CardWithReservationResponse;
+import com.ikiningyou.drserver.model.dto.card.web.CardAdminDetailResponse;
+import com.ikiningyou.drserver.model.dto.card.web.CardWithReservationOnIndexResponse;
+import com.ikiningyou.drserver.model.dto.lostCard.web.LostCardAdminResponse;
+import com.ikiningyou.drserver.model.dto.lostCard.web.LostCardListResponse;
 import com.ikiningyou.drserver.repository.CardRepository;
 import com.ikiningyou.drserver.repository.LostCardRepository;
-import com.ikiningyou.drserver.util.Strings;
+import com.ikiningyou.drserver.util.CardResults;
 import com.ikiningyou.drserver.util.builder.card.CardBuilder;
 import com.ikiningyou.drserver.util.builder.card.TechTypeBuilder;
 import com.ikiningyou.drserver.util.builder.lostCard.LostCardBuilder;
@@ -18,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -103,19 +108,19 @@ public class CardService {
   public String authorizeCard(String cardId) {
     Optional<LostCard> rowLostCard = lostCardRepository.findById(cardId);
     if (rowLostCard.isPresent()) {
-      return Strings.CARD_LOST;
+      return CardResults.CARD_LOST;
     }
 
     Optional<Card> card = cardRepository.findById(cardId);
 
     if (card.isPresent() == false) {
-      return Strings.CARD_UNAUTHORIZED;
+      return CardResults.CARD_UNAUTHORIZED;
     }
     card.get().setLastTagged(LocalDateTime.now());
     if (card.get().isAdmin()) {
-      return Strings.CARD_ADMIN;
+      return CardResults.CARD_ADMIN;
     }
-    return Strings.CARD_AUTHORIZED;
+    return CardResults.CARD_AUTHORIZED;
   }
 
   public CardWithReservationResponse[] searchCardById(String id) {
@@ -157,5 +162,42 @@ public class CardService {
       e.printStackTrace();
     }
     return null;
+  }
+
+  public CardWithReservationOnIndexResponse[] getCardWithReservationOnIndexByUserId(
+    String userId
+  ) {
+    List<CardWithReservationOnIndex> cards = cardRepository.getAllByUserId(
+      userId
+    );
+    List<CardWithReservationOnIndexResponse> cardResponses = new ArrayList<CardWithReservationOnIndexResponse>();
+    for (CardWithReservationOnIndex card : cards) {
+      cardResponses.add(
+        CardBuilder.CardWithReservationOnIndexToCardWithReservationOnIndexResponse(
+          card
+        )
+      );
+    }
+    CardWithReservationOnIndexResponse[] cardList = cardResponses.toArray(
+      new CardWithReservationOnIndexResponse[cardResponses.size()]
+    );
+
+    return cardList;
+  }
+
+  public LostCardAdminResponse[] getAdminLostCards() {
+    List<LostCard> lostCards = lostCardRepository.findAll();
+    return lostCards
+      .stream()
+      .map(item -> LostCardBuilder.LostCardToLostCardAdminResponse(item))
+      .toArray(LostCardAdminResponse[]::new);
+  }
+
+  public CardAdminDetailResponse[] getAdminCards() {
+    List<Card> cards = cardRepository.findAll();
+    return cards
+      .stream()
+      .map(item -> CardBuilder.CardToCardAdminDetailResponse(item))
+      .toArray(CardAdminDetailResponse[]::new);
   }
 }
