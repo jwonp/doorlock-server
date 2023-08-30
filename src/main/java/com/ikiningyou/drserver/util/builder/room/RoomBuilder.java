@@ -5,6 +5,7 @@ import com.ikiningyou.drserver.model.data.room.ReservationDetail;
 import com.ikiningyou.drserver.model.dto.room.mobile.RoomResponse;
 import com.ikiningyou.drserver.model.dto.room.mobile.RoomWithReservation;
 import com.ikiningyou.drserver.model.dto.room.web.RoomAdminResponse;
+import com.ikiningyou.drserver.model.dto.room.web.RoomSelectResponse;
 import com.ikiningyou.drserver.util.builder.reservation.ReservationIdsBuilder;
 
 public class RoomBuilder {
@@ -51,6 +52,14 @@ public class RoomBuilder {
           )
           .toArray(ReservationDetail[]::new)
       )
+      .build();
+  }
+
+  public static RoomSelectResponse RoomToRoomSelectResponse(Room room) {
+    return RoomSelectResponse
+      .builder()
+      .roomId(room.getId())
+      .address(room.getAddress())
       .build();
   }
 }
