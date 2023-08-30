@@ -6,10 +6,10 @@ import com.ikiningyou.drserver.model.dto.card.mobile.CardDeleteRequest;
 import com.ikiningyou.drserver.model.dto.card.mobile.CardResponse;
 import com.ikiningyou.drserver.model.dto.card.mobile.CardWithReservationResponse;
 import com.ikiningyou.drserver.model.dto.card.web.CardAdminDetailResponse;
-import com.ikiningyou.drserver.model.dto.card.web.CardWithReservationOnIndexResponse;
-import com.ikiningyou.drserver.model.dto.lostCard.web.LostCardAddRequest;
+import com.ikiningyou.drserver.model.dto.card.web.CardIndexResponse;
 import com.ikiningyou.drserver.model.dto.lostCard.web.LostCardAdminResponse;
 import com.ikiningyou.drserver.model.dto.lostCard.web.LostCardListResponse;
+import com.ikiningyou.drserver.model.dto.lostCard.web.LostCardRequest;
 import com.ikiningyou.drserver.service.CardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,7 +111,7 @@ public class CardController {
 
   @PostMapping("/lost")
   public ResponseEntity<LostCard> requestLostCard(
-    @RequestBody LostCardAddRequest request
+    @RequestBody LostCardRequest request
   ) {
     LostCard savedLostCard = cardService.addLostCard(request.getCardId());
     HttpStatus status = HttpStatus.OK;
@@ -121,24 +121,26 @@ public class CardController {
     return ResponseEntity.status(status).body(savedLostCard);
   }
 
-  @GetMapping("/index")
-  public ResponseEntity<CardWithReservationOnIndexResponse[]> getCardWithReservationOnIndexByUserId(
-    @RequestParam("id") String userId,
-    Authentication authentication
+  @DeleteMapping("/lost")
+  public ResponseEntity<Boolean> cancelLostCard(
+    @RequestBody LostCardRequest request
   ) {
-    log.info("is auth ? {}", authentication.isAuthenticated());
-
-    if (authentication != null && authentication.isAuthenticated()) {
-      log.info(
-        "  authorities {}",
-        authentication.getAuthorities().stream().toArray()[0]
-      );
-    }
-    CardWithReservationOnIndexResponse[] cardList = cardService.getCardWithReservationOnIndexByUserId(
-      userId
-    );
+    log.info("delete lost");
+    boolean isCanceled = cardService.cancelLostCard(request.getCardId());
     HttpStatus status = HttpStatus.OK;
-    log.info("/index");
+    if (isCanceled == false) {
+      status = HttpStatus.BAD_REQUEST;
+    }
+    return ResponseEntity.status(status).body(isCanceled);
+  }
+
+  @GetMapping("/index")
+  public ResponseEntity<CardIndexResponse[]> getCardWithReservationOnIndexByUserId(
+    @RequestParam("id") String userId
+  ) {
+    CardIndexResponse[] cardList = cardService.getCardIndexByUserId(userId);
+    HttpStatus status = HttpStatus.OK;
+
     return ResponseEntity.status(status).body(cardList);
   }
 

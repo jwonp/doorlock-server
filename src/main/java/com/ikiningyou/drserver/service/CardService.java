@@ -8,7 +8,7 @@ import com.ikiningyou.drserver.model.dto.card.mobile.CardAddRequest;
 import com.ikiningyou.drserver.model.dto.card.mobile.CardResponse;
 import com.ikiningyou.drserver.model.dto.card.mobile.CardWithReservationResponse;
 import com.ikiningyou.drserver.model.dto.card.web.CardAdminDetailResponse;
-import com.ikiningyou.drserver.model.dto.card.web.CardWithReservationOnIndexResponse;
+import com.ikiningyou.drserver.model.dto.card.web.CardIndexResponse;
 import com.ikiningyou.drserver.model.dto.lostCard.web.LostCardAdminResponse;
 import com.ikiningyou.drserver.model.dto.lostCard.web.LostCardListResponse;
 import com.ikiningyou.drserver.repository.CardRepository;
@@ -164,22 +164,34 @@ public class CardService {
     return null;
   }
 
-  public CardWithReservationOnIndexResponse[] getCardWithReservationOnIndexByUserId(
+
+  public boolean cancelLostCard(String cardId) {
+    try {
+      lostCardRepository.deleteByIdInQuery(cardId);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+    return true;
+  }
+
+
+  public CardIndexResponse[] getCardIndexByUserId(
     String userId
   ) {
     List<CardWithReservationOnIndex> cards = cardRepository.getAllByUserId(
       userId
     );
-    List<CardWithReservationOnIndexResponse> cardResponses = new ArrayList<CardWithReservationOnIndexResponse>();
+    List<CardIndexResponse> cardResponses = new ArrayList<CardIndexResponse>();
     for (CardWithReservationOnIndex card : cards) {
       cardResponses.add(
-        CardBuilder.CardWithReservationOnIndexToCardWithReservationOnIndexResponse(
+        CardBuilder.CardWithReservationOnIndexToCardIndexResponse(
           card
         )
       );
     }
-    CardWithReservationOnIndexResponse[] cardList = cardResponses.toArray(
-      new CardWithReservationOnIndexResponse[cardResponses.size()]
+    CardIndexResponse[] cardList = cardResponses.toArray(
+      new CardIndexResponse[cardResponses.size()]
     );
 
     return cardList;

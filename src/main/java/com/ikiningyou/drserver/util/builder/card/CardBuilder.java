@@ -7,7 +7,7 @@ import com.ikiningyou.drserver.model.dto.card.mobile.CardAddRequest;
 import com.ikiningyou.drserver.model.dto.card.mobile.CardResponse;
 import com.ikiningyou.drserver.model.dto.card.mobile.CardWithReservationResponse;
 import com.ikiningyou.drserver.model.dto.card.web.CardAdminDetailResponse;
-import com.ikiningyou.drserver.model.dto.card.web.CardWithReservationOnIndexResponse;
+import com.ikiningyou.drserver.model.dto.card.web.CardIndexResponse;
 import com.ikiningyou.drserver.util.NfcCardTechTypeParser;
 
 public class CardBuilder {
@@ -71,10 +71,10 @@ public class CardBuilder {
       .build();
   }
 
-  public static CardWithReservationOnIndexResponse CardWithReservationOnIndexToCardWithReservationOnIndexResponse(
+  public static CardIndexResponse CardWithReservationOnIndexToCardIndexResponse(
     CardWithReservationOnIndex card
   ) {
-    return CardWithReservationOnIndexResponse
+    return CardIndexResponse
       .builder()
       .cardId(card.getCardId())
       .reservation(
@@ -88,10 +88,13 @@ public class CardBuilder {
           .build()
       )
       .lastTagged(card.getLastTagged())
+      .lostTime(card.getLostTime())
       .build();
   }
 
-  public static CardAdminDetailResponse CardToCardAdminDetailResponse(Card card) {
+  public static CardAdminDetailResponse CardToCardAdminDetailResponse(
+    Card card
+  ) {
     if (card.getReservation() == null) {
       return CardAdminDetailResponse
         .builder()
