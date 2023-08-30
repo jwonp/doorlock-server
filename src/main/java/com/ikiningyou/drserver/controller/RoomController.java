@@ -6,6 +6,7 @@ import com.ikiningyou.drserver.model.dto.room.mobile.RoomDeleteRequest;
 import com.ikiningyou.drserver.model.dto.room.mobile.RoomResponse;
 import com.ikiningyou.drserver.model.dto.room.mobile.RoomWithReservation;
 import com.ikiningyou.drserver.model.dto.room.web.RoomAdminResponse;
+import com.ikiningyou.drserver.model.dto.room.web.RoomSelectResponse;
 import com.ikiningyou.drserver.service.RoomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +95,13 @@ public class RoomController {
   public ResponseEntity<RoomAdminResponse[]> getAdminCards() {
     RoomAdminResponse[] rooms = roomService.getAdminCards();
     HttpStatus status = HttpStatus.OK;
+    return ResponseEntity.status(status).body(rooms);
+  }
+
+  @GetMapping("/select")
+  public ResponseEntity<RoomSelectResponse[]> getRoomListForRequest(){
+    RoomSelectResponse[] rooms = roomService.getRoomListForRequest();
+    HttpStatus status= HttpStatus.OK;
     return ResponseEntity.status(status).body(rooms);
   }
 }
