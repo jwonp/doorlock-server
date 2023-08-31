@@ -49,15 +49,10 @@ public class Reservation {
   @JoinColumn(name = "room_id", updatable = true)
   private Room room;
 
-  @Column(name = "is_checked_in", nullable = true, updatable = true)
-  private Boolean isCheckedIn;
 
   @CreationTimestamp
   @Column(name = "created_time")
   private Timestamp createdTime;
 
-  @PrePersist
-  void preSetIsCheckedIn() {
-    this.isCheckedIn = false;
-  }
+
 }
