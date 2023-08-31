@@ -5,8 +5,22 @@ import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationFullRespo
 import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationResponse;
 import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationWithUserResponse;
 import com.ikiningyou.drserver.model.dto.reservation.web.ReservationAdminResponse;
+import com.ikiningyou.drserver.model.dto.reservation.web.ReservationWithProfile;
 
 public class ReservationBuilder {
+
+  public static ReservationWithProfile ReservationToReservationWithProfile(
+    Reservation reservation
+  ) {
+    return ReservationWithProfile
+      .builder()
+      .reservationId(reservation.getId())
+      .createdTime(reservation.getCreatedTime())
+      .name(reservation.getUser().getName())
+      .phone(reservation.getUser().getPhone())
+      .address(reservation.getRoom().getAddress())
+      .build();
+  }
 
   public static ReservationResponse ReservationToReservationResponse(
     Reservation reservation
@@ -17,7 +31,6 @@ public class ReservationBuilder {
       .userId(reservation.getUser().getId())
       .cardId(reservation.getCard().getId())
       .roomId(reservation.getRoom().getId())
-      .isCheckedIn(reservation.getIsCheckedIn())
       .build();
   }
 
@@ -47,7 +60,6 @@ public class ReservationBuilder {
       .cardId(reservation.getCard().getId())
       .roomId(reservation.getRoom().getId())
       .address(reservation.getRoom().getAddress())
-      .isCheckedIn(reservation.getIsCheckedIn())
       .build();
   }
 
