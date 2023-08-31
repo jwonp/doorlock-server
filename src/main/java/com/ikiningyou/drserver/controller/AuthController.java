@@ -5,7 +5,7 @@ import com.ikiningyou.drserver.model.dto.auth.AuthAuthorizeCardResponse;
 import com.ikiningyou.drserver.model.dto.auth.web.AuthLoginRequest;
 import com.ikiningyou.drserver.service.AuthService;
 import com.ikiningyou.drserver.service.CardService;
-import com.ikiningyou.drserver.util.Strings;
+import com.ikiningyou.drserver.util.CardResults;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -33,13 +33,19 @@ public class AuthController {
   @Autowired
   private AuthService authService;
 
+  @GetMapping("/admin")
+  public ResponseEntity<Boolean> checkAdmin() {
+    HttpStatus status = HttpStatus.OK;
+    return ResponseEntity.status(status).body(true);
+  }
+
   @PostMapping("/card")
   public ResponseEntity<AuthAuthorizeCardResponse> authorizeTaggedCard(
     @RequestBody AuthAuthorizeCardRequest request
   ) {
     String AuthorizedResult = cardService.authorizeCard(request.getCardId());
     HttpStatus status = HttpStatus.OK;
-    if (AuthorizedResult == Strings.CARD_LOST) {
+    if (AuthorizedResult == CardResults.CARD_LOST) {
       status = HttpStatus.UNAUTHORIZED;
     }
     AuthAuthorizeCardResponse result = AuthAuthorizeCardResponse
@@ -58,8 +64,6 @@ public class AuthController {
 
   @PostMapping("/login")
   public ResponseEntity<String> login(@RequestBody AuthLoginRequest request) {
-    log.info("/auth/login username is  {}, password is {}", request.getUsername(), request.getPassword());
-
     HttpStatus status = HttpStatus.OK;
     String token = "";
     try {
@@ -73,35 +77,5 @@ public class AuthController {
     }
 
     return ResponseEntity.status(status).body(token);
-  }
-
-  @GetMapping("/login/success")
-  public ResponseEntity<String> loginSuccess(
-    HttpServletRequest req,
-    HttpServletResponse res,
-    Authentication authentication
-  ) {
-    HttpStatus status = HttpStatus.OK;
-    log.info(
-      "/login/success res {} res {} isAuth null? {}  context {}",
-      req.getHeader("cookie"),
-      res.getHeader("cookie"),
-      authentication == null,
-      SecurityContextHolder.getContext().getAuthentication().getName()
-    );
-
-    // if (authentication.isAuthenticated()) {
-    //   log.info("authed {}", authentication.getName());
-    // } else {
-    //   log.info("not authed");
-    // }
-    return ResponseEntity.status(status).body("login");
-  }
-
-  //redirect 되는 과정에서 세션이 담김
-  @GetMapping("/logout/success")
-  public ResponseEntity<String> logoutSuccess() {
-    HttpStatus status = HttpStatus.OK;
-    return ResponseEntity.status(status).body("logout");
   }
 }
