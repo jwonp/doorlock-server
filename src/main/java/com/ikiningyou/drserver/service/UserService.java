@@ -7,6 +7,7 @@ import com.ikiningyou.drserver.model.dto.user.mobile.UserResponse;
 import com.ikiningyou.drserver.model.dto.user.mobile.UserWithReservationsResponse;
 import com.ikiningyou.drserver.model.dto.user.web.UserAdminResponse;
 import com.ikiningyou.drserver.repository.UserRepository;
+import com.ikiningyou.drserver.util.Authorities;
 import com.ikiningyou.drserver.util.builder.user.UserBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +29,9 @@ public class UserService {
 
   @Autowired
   private UserDetailService userDetailService;
+
+  @Autowired
+  private AuthorityService authorityService;
 
   public UserResponse getUserById(String userId) {
     Optional<User> rowUser = userRepository.findById(userId);
@@ -76,6 +80,7 @@ public class UserService {
         newUser.getId(),
         encoder.bCryptPasswordEncoder().encode(newUser.getPassword())
       );
+      authorityService.addAuthority(newUser.getId(), Authorities.USER);
       return UserBuilder.UserToUserResponse(savedUser);
     } catch (IllegalArgumentException e) {
       e.printStackTrace();
