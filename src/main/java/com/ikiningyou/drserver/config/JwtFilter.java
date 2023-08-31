@@ -1,5 +1,7 @@
 package com.ikiningyou.drserver.config;
 
+import com.ikiningyou.drserver.service.AuthService;
+import com.ikiningyou.drserver.util.Authorities;
 import com.ikiningyou.drserver.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,7 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
-  // private final UserService userService;
+  private final AuthService authService;
   private final String secretKey;
 
   @Override
@@ -40,7 +42,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     //Token 꺼내기
     String token = authorization.split(" ")[1];
-
+    log.info("token is {}", token);
     if (JwtUtil.isTokenNotVaild(token, secretKey)) {
       log.error("Token is Not vaild");
       filterChain.doFilter(request, response);
@@ -58,12 +60,17 @@ public class JwtFilter extends OncePerRequestFilter {
     String username = JwtUtil.getUsername(token, secretKey);
 
     log.info("username:{}", username);
-
+    boolean isAdmin = authService.isAdmin(username);
+    String authority = Authorities.USER;
+    if (isAdmin) {
+      authority = Authorities.ADMIN;
+    }
+    log.info("is admin {} , authority {} ", isAdmin, authority);
     //권한 부여
     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
       username,
       null,
-      List.of(new SimpleGrantedAuthority("USER"))
+      List.of(new SimpleGrantedAuthority(authority))
     );
 
     //Detail
