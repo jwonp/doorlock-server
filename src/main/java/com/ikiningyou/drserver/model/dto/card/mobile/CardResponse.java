@@ -1,9 +1,7 @@
-package com.ikiningyou.drserver.model.dto.card;
-
-import java.time.LocalDateTime;
-import java.util.Date;
+package com.ikiningyou.drserver.model.dto.card.mobile;
 
 import com.ikiningyou.drserver.model.data.TechType;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

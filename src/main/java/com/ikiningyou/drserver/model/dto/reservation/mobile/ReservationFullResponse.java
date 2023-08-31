@@ -1,4 +1,4 @@
-package com.ikiningyou.drserver.model.dto.reservation;
+package com.ikiningyou.drserver.model.dto.reservation.mobile;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,5 +22,4 @@ public class ReservationFullResponse {
   private int roomId;
   private String address;
 
-  private Boolean isCheckedIn;
 }

@@ -1,4 +1,4 @@
-package com.ikiningyou.drserver.model.dto.card;
+package com.ikiningyou.drserver.model.dto.reservation.mobile;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class CardDeleteRequest {
+public class ReservationDeleteRequest {
 
-  String[] idList;
+  private Long[] idList;
 }

@@ -1,4 +1,4 @@
-package com.ikiningyou.drserver.model.dto.room;
+package com.ikiningyou.drserver.model.dto.room.web;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Builder
-public class RoomResponse {
-
-  private int id;
-  private String address;
+public class RoomSelectResponse {
+    private int roomId;
+    private String address;
 }

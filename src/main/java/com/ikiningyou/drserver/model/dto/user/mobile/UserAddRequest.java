@@ -1,6 +1,6 @@
-package com.ikiningyou.drserver.model.dto.user;
+package com.ikiningyou.drserver.model.dto.user.mobile;
 
-import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,9 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
-public class UserResponse {
+public class UserAddRequest {
 
   private String id;
+  private String password;
   private String name;
   private String phone;
 }

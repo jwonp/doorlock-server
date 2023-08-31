@@ -1,18 +1,18 @@
-package com.ikiningyou.drserver.model.dto.card;
+package com.ikiningyou.drserver.model.dto.user.mobile;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Builder
-public class CardAddRequest {
+public class UserResponse {
 
   private String id;
-  private int maxSize;
-  private String[] techTypes;
-  private String type;
+  private String name;
+  private String phone;
 }

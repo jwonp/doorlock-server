@@ -1,4 +1,4 @@
-package com.ikiningyou.drserver.model.dto.lostCard;
+package com.ikiningyou.drserver.model.dto.room.mobile;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class LostCardAddRequest {
+public class RoomAddRequest {
 
-  private String cardId;
+  String address;
 }

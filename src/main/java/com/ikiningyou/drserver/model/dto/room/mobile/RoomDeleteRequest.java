@@ -1,4 +1,4 @@
-package com.ikiningyou.drserver.model.dto.room;
+package com.ikiningyou.drserver.model.dto.room.mobile;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

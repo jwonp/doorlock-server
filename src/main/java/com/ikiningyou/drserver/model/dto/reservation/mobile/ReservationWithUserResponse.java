@@ -1,4 +1,4 @@
-package com.ikiningyou.drserver.model.dto.reservation;
+package com.ikiningyou.drserver.model.dto.reservation.mobile;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Builder
-public class ReservationResponse {
+public class ReservationWithUserResponse  {
     private Long id;
-    private String userId;
-    private int roomId;
     private String cardId;
-    private Boolean isCheckedIn;
+    private int roomId;
+    private String userId;
+    private String name;
+    private String phone;
+    
 }

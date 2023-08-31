@@ -1,4 +1,4 @@
-package com.ikiningyou.drserver.model.dto.reservation;
+package com.ikiningyou.drserver.model.dto.user.mobile;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class ReservationDeleteRequest {
-
-  private Long[] idList;
+public class UserDeleteRequest {
+    private String[] idList;
 }
