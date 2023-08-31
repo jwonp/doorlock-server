@@ -110,15 +110,15 @@ public class CardController {
   }
 
   @PostMapping("/lost")
-  public ResponseEntity<LostCard> requestLostCard(
+  public ResponseEntity<Boolean> requestLostCard(
     @RequestBody LostCardRequest request
   ) {
-    LostCard savedLostCard = cardService.addLostCard(request.getCardId());
+    Boolean isSaved = cardService.addLostCard(request.getCardId());
     HttpStatus status = HttpStatus.OK;
-    if (savedLostCard == null) {
+    if (isSaved != true) {
       status = HttpStatus.BAD_REQUEST;
     }
-    return ResponseEntity.status(status).body(savedLostCard);
+    return ResponseEntity.status(status).body(isSaved);
   }
 
   @DeleteMapping("/lost")
