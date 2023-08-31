@@ -1,11 +1,16 @@
-package com.ikiningyou.drserver.service;
+ package com.ikiningyou.drserver.service;
 
 import com.ikiningyou.drserver.config.EncoderConfig;
+import com.ikiningyou.drserver.model.dao.Authority;
 import com.ikiningyou.drserver.model.dao.TagLog;
 import com.ikiningyou.drserver.model.dao.UserDetail;
+import com.ikiningyou.drserver.repository.AuthorityRepository;
 import com.ikiningyou.drserver.repository.LogRepository;
 import com.ikiningyou.drserver.repository.UserDetailRepository;
+import com.ikiningyou.drserver.util.Authorities;
 import com.ikiningyou.drserver.util.JwtUtil;
+import java.util.Iterator;
+import java.util.List;
 import java.util.function.Supplier;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +29,9 @@ public class AuthService {
 
   @Autowired
   private UserDetailRepository userDetailRepository;
+
+  @Autowired
+  private AuthorityRepository authorityRepository;
 
   @Autowired
   private EncoderConfig encoderConfig;
@@ -68,5 +76,17 @@ public class AuthService {
     String token = JwtUtil.createToken(user.getUsername(), key, expireTimeMs);
 
     return token;
+  }
+
+  public boolean isAdmin(String username) {
+    Authority authority = authorityRepository
+      .findByUser(username)
+      .orElseThrow(() ->
+        new UsernameNotFoundException("해당 유저를 찾을 수 없습니다")
+      );
+
+    boolean isAdmin = authority.getAuthority().equals(Authorities.ADMIN);
+
+    return isAdmin;
   }
 }
