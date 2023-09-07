@@ -1,4 +1,4 @@
-package com.ikiningyou.drserver.model.dto.card;
+package com.ikiningyou.drserver.model.dto.lostCard.web;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class CardDeleteRequest {
+public class LostCardRequest {
 
-  String[] idList;
+  private String cardId;
 }

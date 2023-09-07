@@ -1,9 +1,6 @@
-package com.ikiningyou.drserver.model.dto.user;
+package com.ikiningyou.drserver.model.dto.user.mobile;
 
-import com.ikiningyou.drserver.model.dao.Reservation;
 import com.ikiningyou.drserver.model.data.reservation.ReservationWithoutUserId;
-import com.ikiningyou.drserver.model.dto.reservation.ReservationResponse;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

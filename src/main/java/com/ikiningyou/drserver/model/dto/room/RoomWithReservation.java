@@ -1,4 +1,4 @@
-package com.ikiningyou.drserver.model.dto.room;
+package com.ikiningyou.drserver.model.dto.room.mobile;
 
 import com.ikiningyou.drserver.model.data.reservation.ReservationWithoutRoomId;
 

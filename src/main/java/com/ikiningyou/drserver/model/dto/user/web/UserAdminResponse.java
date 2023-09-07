@@ -1,20 +1,19 @@
-package com.ikiningyou.drserver.model.dto.reservation.mobile;
+package com.ikiningyou.drserver.model.dto.user.web;
+
+import com.ikiningyou.drserver.model.data.user.ReservationDetail;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Builder
-public class ReservationWithUserResponse  {
-    private Long id;
-    private String cardId;
-    private int roomId;
+public class UserAdminResponse {
     private String userId;
     private String name;
     private String phone;
-    
+    private ReservationDetail[] reservations;
 }

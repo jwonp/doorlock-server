@@ -1,5 +1,7 @@
-package com.ikiningyou.drserver.model.dto.reservation.mobile;
+package com.ikiningyou.drserver.model.dto.log.web;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,17 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
-public class ReservationFullResponse {
+public class LogAdminResponse {
 
-  private Long id;
-
-  private String userId;
-  private String name;
-  private String phone;
-
+  private Long logId;
+  private String result;
   private String cardId;
-
-  private int roomId;
   private String address;
-
+  private Timestamp taggedTime;
 }

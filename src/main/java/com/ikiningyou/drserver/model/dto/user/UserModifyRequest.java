@@ -1,4 +1,4 @@
-package com.ikiningyou.drserver.model.dto.user;
+package com.ikiningyou.drserver.model.dto.user.mobile;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;

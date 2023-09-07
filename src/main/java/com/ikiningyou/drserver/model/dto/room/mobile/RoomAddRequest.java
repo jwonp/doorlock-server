@@ -1,4 +1,4 @@
-package com.ikiningyou.drserver.model.dto.user;
+package com.ikiningyou.drserver.model.dto.room.mobile;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class UserDeleteRequest {
-    private String[] idList;
+public class RoomAddRequest {
+
+  String address;
 }

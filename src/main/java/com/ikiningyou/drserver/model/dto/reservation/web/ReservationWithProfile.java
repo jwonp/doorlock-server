@@ -1,25 +1,20 @@
-package com.ikiningyou.drserver.model.dto.reservation.mobile;
+package com.ikiningyou.drserver.model.dto.reservation.web;
 
+import java.sql.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Builder
-public class ReservationFullResponse {
+public class ReservationWithProfile {
 
-  private Long id;
-
-  private String userId;
+  private Long reservationId;
   private String name;
   private String phone;
-
-  private String cardId;
-
-  private int roomId;
   private String address;
-
+  private Timestamp createdTime;
 }

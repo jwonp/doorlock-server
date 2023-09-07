@@ -1,4 +1,6 @@
-package com.ikiningyou.drserver.model.dto.reservation.mobile;
+package com.ikiningyou.drserver.model.dto.lostCard.web;
+
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Builder
-public class ReservationWithUserResponse  {
-    private Long id;
+public class LostCardAdminResponse {
     private String cardId;
-    private int roomId;
     private String userId;
     private String name;
     private String phone;
-    
+    private String address;
+    private LocalDateTime lastTagged;
 }
