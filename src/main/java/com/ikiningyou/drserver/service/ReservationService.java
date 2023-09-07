@@ -2,17 +2,23 @@ package com.ikiningyou.drserver.service;
 
 import com.ikiningyou.drserver.model.dao.Card;
 import com.ikiningyou.drserver.model.dao.Reservation;
+import com.ikiningyou.drserver.model.dao.ReservedRequest;
 import com.ikiningyou.drserver.model.dao.Room;
 import com.ikiningyou.drserver.model.dao.User;
-import com.ikiningyou.drserver.model.dto.reservation.ReservationFullResponse;
-import com.ikiningyou.drserver.model.dto.reservation.ReservationModifyRequest;
-import com.ikiningyou.drserver.model.dto.reservation.ReservationResponse;
-import com.ikiningyou.drserver.model.dto.reservation.ReservationWithUserResponse;
+import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationFullResponse;
+import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationModifyRequest;
+import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationResponse;
+import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationWithUserResponse;
+import com.ikiningyou.drserver.model.dto.reservation.web.ReservationAdminResponse;
+import com.ikiningyou.drserver.model.dto.reservation.web.ReservationWithProfile;
+import com.ikiningyou.drserver.model.dto.reservedRequest.web.AdminReservedRequestResponse;
 import com.ikiningyou.drserver.repository.CardRepository;
 import com.ikiningyou.drserver.repository.ReservationRepository;
+import com.ikiningyou.drserver.repository.ReservedRequestRepository;
 import com.ikiningyou.drserver.repository.RoomRepository;
 import com.ikiningyou.drserver.repository.UserRepository;
 import com.ikiningyou.drserver.util.builder.reservation.ReservationBuilder;
+import com.ikiningyou.drserver.util.builder.reservedRequset.ReservedRequestBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +26,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +37,9 @@ public class ReservationService {
   private ReservationRepository reservationRepository;
 
   @Autowired
+  private ReservedRequestRepository reservedRequestRepository;
+
+  @Autowired
   private CardRepository cardRepository;
 
   @Autowired
@@ -37,6 +47,14 @@ public class ReservationService {
 
   @Autowired
   private RoomRepository roomRepository;
+
+  public ReservationWithProfile getReservationWithProfileById(Long id)
+    throws NotFoundException {
+    Reservation reservation = reservationRepository
+      .findById(id)
+      .orElseThrow(() -> new NotFoundException());
+    return ReservationBuilder.ReservationToReservationWithProfile(reservation);
+  }
 
   public ReservationResponse[] getAllReservations() {
     List<Reservation> reservations = reservationRepository.findAll();
@@ -156,13 +174,59 @@ public class ReservationService {
     return reservation;
   }
 
-  public Boolean deleteReservations (Long[] reservationIdList){
+  public Boolean deleteReservations(Long[] reservationIdList) {
     try {
-      reservationRepository.deleteAllByIdInQuery(Arrays.asList(reservationIdList));
+      reservationRepository.deleteAllByIdInQuery(
+        Arrays.asList(reservationIdList)
+      );
     } catch (Exception e) {
       e.printStackTrace();
       return false;
     }
     return true;
+  }
+
+  public AdminReservedRequestResponse[] getAdminReservedRequests() {
+    List<ReservedRequest> reservations = reservedRequestRepository.findAll();
+    return reservations
+      .stream()
+      .map(item ->
+        ReservedRequestBuilder.ReservedRequestToAdminReservedRequestResponse(
+          item
+        )
+      )
+      .toArray(AdminReservedRequestResponse[]::new);
+  }
+
+  public ReservationAdminResponse[] getAdminReservations() {
+    List<Reservation> reservations = reservationRepository.findAll();
+    return reservations
+      .stream()
+      .map(item ->
+        ReservationBuilder.ReservationToReservationAdminResponse(item)
+      )
+      .toArray(ReservationAdminResponse[]::new);
+  }
+
+  public Boolean requestReservationChange(Long reservationId, int roomId)
+    throws NotFoundException {
+    Reservation reservation = reservationRepository
+      .findById(reservationId)
+      .orElseThrow(() -> new NotFoundException());
+    ReservedRequest request = ReservedRequest
+      .builder()
+      .user(reservation.getUser())
+      .room(reservation.getRoom())
+      .isAccepted(false)
+      .build();
+    try {
+      reservedRequestRepository.save(request);
+      return true;
+    } catch (IllegalArgumentException e) {
+      e.printStackTrace();
+    } catch (OptimisticLockingFailureException e) {
+      e.printStackTrace();
+    }
+    return false;
   }
 }

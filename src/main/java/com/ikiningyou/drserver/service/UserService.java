@@ -1,23 +1,23 @@
 package com.ikiningyou.drserver.service;
 
+import com.ikiningyou.drserver.config.EncoderConfig;
 import com.ikiningyou.drserver.model.dao.User;
-import com.ikiningyou.drserver.model.dto.user.UserAddRequest;
-import com.ikiningyou.drserver.model.dto.user.UserResponse;
-import com.ikiningyou.drserver.model.dto.user.UserWithReservationsResponse;
+import com.ikiningyou.drserver.model.dto.user.mobile.UserAddRequest;
+import com.ikiningyou.drserver.model.dto.user.mobile.UserResponse;
+import com.ikiningyou.drserver.model.dto.user.mobile.UserWithReservationsResponse;
+import com.ikiningyou.drserver.model.dto.user.web.UserAdminResponse;
 import com.ikiningyou.drserver.repository.UserRepository;
+import com.ikiningyou.drserver.util.Authorities;
 import com.ikiningyou.drserver.util.builder.user.UserBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
 @Service
 public class UserService {
 
@@ -25,7 +25,13 @@ public class UserService {
   private UserRepository userRepository;
 
   @Autowired
+  private EncoderConfig encoder;
+
+  @Autowired
   private UserDetailService userDetailService;
+
+  @Autowired
+  private AuthorityService authorityService;
 
   public UserResponse getUserById(String userId) {
     Optional<User> rowUser = userRepository.findById(userId);
@@ -70,7 +76,11 @@ public class UserService {
 
     try {
       User savedUser = userRepository.save(user);
-      userDetailService.addUserDetail(newUser.getId(), newUser.getPassword());
+      userDetailService.addUserDetail(
+        newUser.getId(),
+        encoder.bCryptPasswordEncoder().encode(newUser.getPassword())
+      );
+      authorityService.addAuthority(newUser.getId(), Authorities.USER);
       return UserBuilder.UserToUserResponse(savedUser);
     } catch (IllegalArgumentException e) {
       e.printStackTrace();
@@ -120,5 +130,13 @@ public class UserService {
       userList.add(UserBuilder.UserToUserWithReservationsResponse(user));
     }
     return userList.toArray(new UserWithReservationsResponse[userList.size()]);
+  }
+
+  public UserAdminResponse[] getAdminUsers() {
+    List<User> users = userRepository.findAll();
+    return users
+      .stream()
+      .map(item -> UserBuilder.UserToUserAdminResponse(item))
+      .toArray(UserAdminResponse[]::new);
   }
 }

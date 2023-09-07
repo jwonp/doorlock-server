@@ -1,8 +1,10 @@
 package com.ikiningyou.drserver.service;
 
 import com.ikiningyou.drserver.model.dao.Room;
-import com.ikiningyou.drserver.model.dto.room.RoomResponse;
-import com.ikiningyou.drserver.model.dto.room.RoomWithReservation;
+import com.ikiningyou.drserver.model.dto.room.mobile.RoomResponse;
+import com.ikiningyou.drserver.model.dto.room.mobile.RoomWithReservation;
+import com.ikiningyou.drserver.model.dto.room.web.RoomAdminResponse;
+import com.ikiningyou.drserver.model.dto.room.web.RoomSelectResponse;
 import com.ikiningyou.drserver.repository.RoomRepository;
 import com.ikiningyou.drserver.util.builder.room.RoomBuilder;
 import java.util.ArrayList;
@@ -76,5 +78,22 @@ public class RoomService {
       roomList.add(RoomBuilder.RoomToRoomWithReservation(room));
     }
     return roomList.toArray(new RoomWithReservation[roomList.size()]);
+  }
+
+  public RoomAdminResponse[] getAdminCards() {
+    List<Room> rooms = roomRepository.findAll();
+    return rooms
+      .stream()
+      .map(item -> RoomBuilder.RoomToRoomAdminResponse(item))
+      .toArray(RoomAdminResponse[]::new);
+  }
+
+  public RoomSelectResponse[] getRoomListForRequest() {
+    List<Room> rooms = roomRepository.findAll();
+
+    return rooms
+      .stream()
+      .map(item -> RoomBuilder.RoomToRoomSelectResponse(item))
+      .toArray(RoomSelectResponse[]::new);
   }
 }
