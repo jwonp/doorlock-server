@@ -1,15 +1,21 @@
 package com.ikiningyou.drserver.controller;
 
 import com.ikiningyou.drserver.model.dao.Reservation;
-import com.ikiningyou.drserver.model.dto.reservation.ReservationAddRequest;
-import com.ikiningyou.drserver.model.dto.reservation.ReservationDeleteRequest;
-import com.ikiningyou.drserver.model.dto.reservation.ReservationFullResponse;
-import com.ikiningyou.drserver.model.dto.reservation.ReservationModifyRequest;
-import com.ikiningyou.drserver.model.dto.reservation.ReservationResponse;
-import com.ikiningyou.drserver.model.dto.reservation.ReservationWithUserResponse;
+import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationAddRequest;
+import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationDeleteRequest;
+import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationFullResponse;
+import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationModifyRequest;
+import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationResponse;
+import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationWithUserResponse;
+import com.ikiningyou.drserver.model.dto.reservation.web.ReservationAdminResponse;
+import com.ikiningyou.drserver.model.dto.reservation.web.ReservationWithProfile;
+import com.ikiningyou.drserver.model.dto.reservedRequest.web.AdminReservedRequestResponse;
+import com.ikiningyou.drserver.model.dto.reservedRequest.web.ReservationChangeRequest;
 import com.ikiningyou.drserver.service.ReservationService;
 import com.ikiningyou.drserver.util.builder.reservation.ReservationBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,12 +27,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/reservation")
 public class ReservationController {
 
   @Autowired
   private ReservationService reservationService;
+
+  @GetMapping
+  public ResponseEntity<ReservationWithProfile> getReservationWithProfileById(
+    @RequestParam("id") Long id
+  ) throws NotFoundException {
+    ReservationWithProfile reservation = reservationService.getReservationWithProfileById(
+      id
+    );
+    HttpStatus status = HttpStatus.OK;
+
+    return ResponseEntity.status(status).body(reservation);
+  }
 
   @GetMapping("/list")
   public ResponseEntity<ReservationResponse[]> getAllReservations() {
@@ -122,5 +141,32 @@ public class ReservationController {
       statusCode = HttpStatus.BAD_REQUEST;
     }
     return ResponseEntity.status(statusCode).body(isDeleted);
+  }
+
+  @GetMapping("/admin/reserved")
+  public ResponseEntity<AdminReservedRequestResponse[]> getAdminReservedRequests() {
+    AdminReservedRequestResponse[] reservations = reservationService.getAdminReservedRequests();
+    HttpStatus status = HttpStatus.OK;
+    return ResponseEntity.status(status).body(reservations);
+  }
+
+  @GetMapping("/admin")
+  public ResponseEntity<ReservationAdminResponse[]> getAdminReservations() {
+    ReservationAdminResponse[] reservations = reservationService.getAdminReservations();
+    HttpStatus status = HttpStatus.OK;
+    return ResponseEntity.status(status).body(reservations);
+  }
+
+  @PostMapping("/request")
+  public ResponseEntity<Boolean> requestReservationChanges(
+    @RequestBody ReservationChangeRequest request
+  ) throws NotFoundException {
+    Boolean isSaved = reservationService.requestReservationChange(
+      request.getReservationId(),
+      request.getRoomId()
+    );
+    log.info("is saved request {}", isSaved.toString());
+    HttpStatus status = HttpStatus.OK;
+    return ResponseEntity.status(status).body(isSaved);
   }
 }
