@@ -13,7 +13,9 @@ import com.ikiningyou.drserver.model.dto.lostCard.web.LostCardAdminResponse;
 import com.ikiningyou.drserver.model.dto.lostCard.web.LostCardListResponse;
 import com.ikiningyou.drserver.repository.CardRepository;
 import com.ikiningyou.drserver.repository.LostCardRepository;
+import com.ikiningyou.drserver.util.Authorities;
 import com.ikiningyou.drserver.util.CardResults;
+import com.ikiningyou.drserver.util.JwtUtil;
 import com.ikiningyou.drserver.util.builder.card.CardBuilder;
 import com.ikiningyou.drserver.util.builder.card.TechTypeBuilder;
 import com.ikiningyou.drserver.util.builder.lostCard.LostCardBuilder;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +39,11 @@ public class CardService {
 
   @Autowired
   private LostCardRepository lostCardRepository;
+
+  private Long expireTimeMs = 1000 * 60 * 60l;
+
+  @Value("${jwt.token.secret}")
+  private String key;
 
   public CardResponse getCardById(String userId) {
     Optional<Card> rowCard = cardRepository.findById(userId);
@@ -118,7 +126,7 @@ public class CardService {
     }
     card.get().setLastTagged(LocalDateTime.now());
     if (card.get().isAdmin()) {
-      return CardResults.CARD_ADMIN;
+      return  JwtUtil.createToken(Authorities.ADMIN_CARD, key, expireTimeMs);
     }
     return CardResults.CARD_AUTHORIZED;
   }
