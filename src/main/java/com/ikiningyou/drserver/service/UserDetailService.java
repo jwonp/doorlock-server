@@ -1,5 +1,6 @@
 package com.ikiningyou.drserver.service;
 
+import com.ikiningyou.drserver.config.EncoderConfig;
 import com.ikiningyou.drserver.model.dao.UserDetail;
 import com.ikiningyou.drserver.repository.AuthorityRepository;
 import com.ikiningyou.drserver.repository.UserDetailRepository;
@@ -15,14 +16,16 @@ public class UserDetailService {
   @Autowired
   private UserDetailRepository userDetailRepository;
 
-  
+  @Autowired
+  private EncoderConfig encoder;
+
   public UserDetail addUserDetail(String username, String password) {
     UserDetail userDetail = UserDetail
       .builder()
       .username(username)
       .password(password)
       .build();
-      
+
     try {
       UserDetail savedUserDetail = userDetailRepository.save(userDetail);
       return savedUserDetail;
@@ -41,7 +44,8 @@ public class UserDetailService {
       return false;
     }
     UserDetail userdetail = rowUserdetail.get();
-    userdetail.setPassword(password);
+
+    userdetail.setPassword(encoder.bCryptPasswordEncoder().encode(password));
     return true;
   }
 }
