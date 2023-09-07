@@ -1,12 +1,10 @@
 package com.ikiningyou.drserver.controller;
 
-import com.ikiningyou.drserver.model.dto.lostCard.web.LostCardAdminResponse;
-import com.ikiningyou.drserver.model.dto.user.mobile.UserAddRequest;
-import com.ikiningyou.drserver.model.dto.user.mobile.UserDeleteRequest;
-import com.ikiningyou.drserver.model.dto.user.mobile.UserModifyRequest;
-import com.ikiningyou.drserver.model.dto.user.mobile.UserResponse;
-import com.ikiningyou.drserver.model.dto.user.mobile.UserWithReservationsResponse;
-import com.ikiningyou.drserver.model.dto.user.web.UserAdminResponse;
+import com.ikiningyou.drserver.model.dto.user.UserAddRequest;
+import com.ikiningyou.drserver.model.dto.user.UserDeleteRequest;
+import com.ikiningyou.drserver.model.dto.user.UserModifyRequest;
+import com.ikiningyou.drserver.model.dto.user.UserResponse;
+import com.ikiningyou.drserver.model.dto.user.UserWithReservationsResponse;
 import com.ikiningyou.drserver.service.UserDetailService;
 import com.ikiningyou.drserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,12 +126,5 @@ public class UserController {
       statusCode = HttpStatus.BAD_REQUEST;
     }
     return ResponseEntity.status(statusCode).body(isDeleted);
-  }
-
-  @GetMapping("/admin")
-  public ResponseEntity<UserAdminResponse[]> getAdminUsers() {
-    UserAdminResponse[] users = userService.getAdminUsers();
-    HttpStatus status = HttpStatus.OK;
-    return ResponseEntity.status(status).body(users);
   }
 }

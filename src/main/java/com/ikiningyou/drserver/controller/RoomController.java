@@ -1,14 +1,10 @@
 package com.ikiningyou.drserver.controller;
 
-import com.ikiningyou.drserver.model.dto.card.web.CardAdminDetailResponse;
-import com.ikiningyou.drserver.model.dto.room.mobile.RoomAddRequest;
-import com.ikiningyou.drserver.model.dto.room.mobile.RoomDeleteRequest;
-import com.ikiningyou.drserver.model.dto.room.mobile.RoomResponse;
-import com.ikiningyou.drserver.model.dto.room.mobile.RoomWithReservation;
-import com.ikiningyou.drserver.model.dto.room.web.RoomAdminResponse;
-import com.ikiningyou.drserver.model.dto.room.web.RoomSelectResponse;
+import com.ikiningyou.drserver.model.dto.room.RoomAddRequest;
+import com.ikiningyou.drserver.model.dto.room.RoomDeleteRequest;
+import com.ikiningyou.drserver.model.dto.room.RoomResponse;
+import com.ikiningyou.drserver.model.dto.room.RoomWithReservation;
 import com.ikiningyou.drserver.service.RoomService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
 @RestController
 @RequestMapping("/room")
 public class RoomController {
@@ -42,7 +37,6 @@ public class RoomController {
 
   @GetMapping("/list")
   public ResponseEntity<RoomResponse[]> getAllRooms() {
-    log.info("room list requested");
     RoomResponse[] rooms = roomService.getAllRooms();
     HttpStatus statusCode = HttpStatus.OK;
     if (rooms.length == 0) {
@@ -89,19 +83,5 @@ public class RoomController {
       statusCode = HttpStatus.BAD_REQUEST;
     }
     return ResponseEntity.status(statusCode).body(isDeleted);
-  }
-
-  @GetMapping("/admin")
-  public ResponseEntity<RoomAdminResponse[]> getAdminCards() {
-    RoomAdminResponse[] rooms = roomService.getAdminCards();
-    HttpStatus status = HttpStatus.OK;
-    return ResponseEntity.status(status).body(rooms);
-  }
-
-  @GetMapping("/select")
-  public ResponseEntity<RoomSelectResponse[]> getRoomListForRequest(){
-    RoomSelectResponse[] rooms = roomService.getRoomListForRequest();
-    HttpStatus status= HttpStatus.OK;
-    return ResponseEntity.status(status).body(rooms);
   }
 }

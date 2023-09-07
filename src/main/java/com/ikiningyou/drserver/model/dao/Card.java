@@ -1,6 +1,5 @@
 package com.ikiningyou.drserver.model.dao;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -69,8 +68,4 @@ public class Card {
 
   @OneToOne(mappedBy = "card")
   private Reservation reservation;
-
-  @OneToOne(mappedBy="card", cascade=CascadeType.ALL)
-  private LostCard lostCard;
-
 }

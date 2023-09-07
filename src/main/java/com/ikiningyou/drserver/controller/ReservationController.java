@@ -1,15 +1,12 @@
 package com.ikiningyou.drserver.controller;
 
 import com.ikiningyou.drserver.model.dao.Reservation;
-import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationAddRequest;
-import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationCheckInRequest;
-import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationDeleteRequest;
-import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationFullResponse;
-import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationModifyRequest;
-import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationResponse;
-import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationWithUserResponse;
-import com.ikiningyou.drserver.model.dto.reservation.web.ReservationAdminResponse;
-import com.ikiningyou.drserver.model.dto.reservedRequest.web.AdminReservedRequestResponse;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationAddRequest;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationDeleteRequest;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationFullResponse;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationModifyRequest;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationResponse;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationWithUserResponse;
 import com.ikiningyou.drserver.service.ReservationService;
 import com.ikiningyou.drserver.util.builder.reservation.ReservationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,21 +110,6 @@ public class ReservationController {
     return ResponseEntity.status(statusCode).body(modifiedReservationResponse);
   }
 
-  @PatchMapping("/checkin")
-  public ResponseEntity<Boolean> setCheckIn(
-    @RequestBody ReservationCheckInRequest request
-  ) {
-    Boolean isChanged = reservationService.setCheckIn(
-      request.getReservationId(),
-      request.isCheckIn()
-    );
-    HttpStatus status = HttpStatus.OK;
-    if (isChanged == false) {
-      status = HttpStatus.NOT_ACCEPTABLE;
-    }
-    return ResponseEntity.status(status).body(isChanged);
-  }
-
   @DeleteMapping
   public ResponseEntity<Boolean> deleteReservations(
     @RequestBody ReservationDeleteRequest request
@@ -140,19 +122,5 @@ public class ReservationController {
       statusCode = HttpStatus.BAD_REQUEST;
     }
     return ResponseEntity.status(statusCode).body(isDeleted);
-  }
-
-  @GetMapping("/admin/reserved")
-  public ResponseEntity<AdminReservedRequestResponse[]> getAdminReservedRequests() {
-    AdminReservedRequestResponse[] reservations = reservationService.getAdminReservedRequests();
-    HttpStatus status = HttpStatus.OK;
-    return ResponseEntity.status(status).body(reservations);
-  }
-
-  @GetMapping("/admin")
-  public ResponseEntity<ReservationAdminResponse[]> getAdminReservations() {
-    ReservationAdminResponse[] reservations = reservationService.getAdminReservations();
-    HttpStatus status = HttpStatus.OK;
-    return ResponseEntity.status(status).body(reservations);
   }
 }

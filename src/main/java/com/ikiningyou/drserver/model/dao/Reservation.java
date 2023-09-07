@@ -16,10 +16,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.sql.Timestamp;
-
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 
 @Entity
@@ -49,10 +45,11 @@ public class Reservation {
   @JoinColumn(name = "room_id", updatable = true)
   private Room room;
 
+  @Column(name = "is_checked_in", nullable = true, updatable = true)
+  private Boolean isCheckedIn;
 
-  @CreationTimestamp
-  @Column(name = "created_time")
-  private Timestamp createdTime;
-
-
+  @PrePersist
+  void preSetIsCheckedIn() {
+    this.isCheckedIn = false;
+  }
 }

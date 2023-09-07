@@ -2,22 +2,17 @@ package com.ikiningyou.drserver.service;
 
 import com.ikiningyou.drserver.model.dao.Card;
 import com.ikiningyou.drserver.model.dao.Reservation;
-import com.ikiningyou.drserver.model.dao.ReservedRequest;
 import com.ikiningyou.drserver.model.dao.Room;
 import com.ikiningyou.drserver.model.dao.User;
-import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationFullResponse;
-import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationModifyRequest;
-import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationResponse;
-import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationWithUserResponse;
-import com.ikiningyou.drserver.model.dto.reservation.web.ReservationAdminResponse;
-import com.ikiningyou.drserver.model.dto.reservedRequest.web.AdminReservedRequestResponse;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationFullResponse;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationModifyRequest;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationResponse;
+import com.ikiningyou.drserver.model.dto.reservation.ReservationWithUserResponse;
 import com.ikiningyou.drserver.repository.CardRepository;
 import com.ikiningyou.drserver.repository.ReservationRepository;
-import com.ikiningyou.drserver.repository.ReserveRequestRepository;
 import com.ikiningyou.drserver.repository.RoomRepository;
 import com.ikiningyou.drserver.repository.UserRepository;
 import com.ikiningyou.drserver.util.builder.reservation.ReservationBuilder;
-import com.ikiningyou.drserver.util.builder.reservedRequset.ReservedRequestBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,9 +28,6 @@ public class ReservationService {
 
   @Autowired
   private ReservationRepository reservationRepository;
-
-  @Autowired
-  private ReserveRequestRepository reserveRequestRepository;
 
   @Autowired
   private CardRepository cardRepository;
@@ -164,50 +156,13 @@ public class ReservationService {
     return reservation;
   }
 
-  public Boolean deleteReservations(Long[] reservationIdList) {
+  public Boolean deleteReservations (Long[] reservationIdList){
     try {
-      reservationRepository.deleteAllByIdInQuery(
-        Arrays.asList(reservationIdList)
-      );
+      reservationRepository.deleteAllByIdInQuery(Arrays.asList(reservationIdList));
     } catch (Exception e) {
       e.printStackTrace();
       return false;
     }
     return true;
-  }
-
-  @Transactional
-  public boolean setCheckIn(Long reservationId, boolean checkIn) {
-    Optional<Reservation> rowReservation = reservationRepository.findById(
-      reservationId
-    );
-    if (rowReservation.isPresent() == false) {
-      return false;
-    }
-    Reservation reservation = rowReservation.get();
-    reservation.setIsCheckedIn(checkIn);
-    return true;
-  }
-
-  public AdminReservedRequestResponse[] getAdminReservedRequests() {
-    List<ReservedRequest> reservations = reserveRequestRepository.findAll();
-    return reservations
-      .stream()
-      .map(item ->
-        ReservedRequestBuilder.ReservedRequestToAdminReservedRequestResponse(
-          item
-        )
-      )
-      .toArray(AdminReservedRequestResponse[]::new);
-  }
-
-  public ReservationAdminResponse[] getAdminReservations() {
-    List<Reservation> reservations = reservationRepository.findAll();
-    return reservations
-      .stream()
-      .map(item ->
-        ReservationBuilder.ReservationToReservationAdminResponse(item)
-      )
-      .toArray(ReservationAdminResponse[]::new);
   }
 }

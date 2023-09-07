@@ -1,8 +1,8 @@
 package com.ikiningyou.drserver.util;
-
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.UUID;
 import java.util.Base64;
 import java.util.HashMap;
 import javax.crypto.Cipher;
@@ -11,36 +11,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class RSACrypto {
 
-
-  /*
-   * 공개키와 개인키 한 쌍 생성
-   */
-  public HashMap<String, String> getKeyPairAsString() {
-    HashMap<String, String> stringKeypair = new HashMap<>();
-
-    try {
-      SecureRandom secureRandom = new SecureRandom();
-      KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-      keyPairGenerator.initialize(2048, secureRandom);
-      KeyPair keyPair = keyPairGenerator.genKeyPair();
-      PublicKey publicKey = keyPair.getPublic();
-      PrivateKey privateKey = keyPair.getPrivate();
-
-      String stringPublicKey = Base64
-        .getEncoder()
-        .encodeToString(publicKey.getEncoded());
-      String stringPrivateKey = Base64
-        .getEncoder()
-        .encodeToString(privateKey.getEncoded());
-
-      stringKeypair.put("publicKey", stringPublicKey);
-      stringKeypair.put("privateKey", stringPrivateKey);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    return stringKeypair;
+  public String createUUID() {
+    UUID uuid = UUID.randomUUID();
+    return uuid.toString();
   }
+  
 
   /*
    * 암호화 : 공개키로 진행
@@ -110,5 +85,35 @@ public class RSACrypto {
 
   public String getPublicKey(HashMap<String, String> keyPair) {
     return keyPair.get("publicKey");
+  }
+
+    /*
+   * 공개키와 개인키 한 쌍 생성
+   */
+  private HashMap<String, String> getKeyPairAsString() {
+    HashMap<String, String> stringKeypair = new HashMap<>();
+    try {
+      SecureRandom secureRandom = new SecureRandom();
+      KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+      keyPairGenerator.initialize(2048, secureRandom);
+      KeyPair keyPair = keyPairGenerator.genKeyPair();
+
+      PublicKey publicKey = keyPair.getPublic();
+      PrivateKey privateKey = keyPair.getPrivate();
+
+      String stringPublicKey = Base64
+        .getEncoder()
+        .encodeToString(publicKey.getEncoded());
+      String stringPrivateKey = Base64
+        .getEncoder()
+        .encodeToString(privateKey.getEncoded());
+
+      stringKeypair.put("publicKey", stringPublicKey);
+      stringKeypair.put("privateKey", stringPrivateKey);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return stringKeypair;
   }
 }
