@@ -1,4 +1,4 @@
- package com.ikiningyou.drserver.service;
+package com.ikiningyou.drserver.service;
 
 import com.ikiningyou.drserver.config.EncoderConfig;
 import com.ikiningyou.drserver.model.dao.Authority;
@@ -8,6 +8,7 @@ import com.ikiningyou.drserver.repository.AuthorityRepository;
 import com.ikiningyou.drserver.repository.LogRepository;
 import com.ikiningyou.drserver.repository.UserDetailRepository;
 import com.ikiningyou.drserver.util.Authorities;
+import com.ikiningyou.drserver.util.CardResults;
 import com.ikiningyou.drserver.util.JwtUtil;
 import java.util.Iterator;
 import java.util.List;
@@ -42,11 +43,15 @@ public class AuthService {
   private String key;
 
   public void addTagLog(String cardId, String result, String address) {
-    TagLog log = TagLog
+    String tagResult = result;
+    if (result.split(".").length > 2) {
+      tagResult = CardResults.CARD_ADMIN;
+    }
+    TagLog log = TagLog 
       .builder()
       .cardId(cardId)
       .address(address)
-      .result(result)
+      .result(tagResult)
       .build();
     try {
       logRepository.save(log);
