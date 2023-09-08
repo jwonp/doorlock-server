@@ -126,7 +126,7 @@ public class CardService {
     }
     card.get().setLastTagged(LocalDateTime.now());
     if (card.get().isAdmin()) {
-      return  JwtUtil.createToken(Authorities.ADMIN_CARD, key, expireTimeMs);
+      return JwtUtil.createToken(Authorities.ADMIN_CARD, key, expireTimeMs);
     }
     return CardResults.CARD_AUTHORIZED;
   }
@@ -186,6 +186,9 @@ public class CardService {
     List<CardWithReservationOnIndex> cards = cardRepository.getAllByUserId(
       userId
     );
+    if (cards.size() <= 0) {
+      return new CardIndexResponse[0];
+    }
     List<CardIndexResponse> cardResponses = new ArrayList<CardIndexResponse>();
     for (CardWithReservationOnIndex card : cards) {
       cardResponses.add(
