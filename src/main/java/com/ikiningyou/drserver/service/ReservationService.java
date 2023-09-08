@@ -149,23 +149,23 @@ public class ReservationService {
       return null;
     }
     Reservation reservation = rowReservation.get();
-    if (data.getUserId().isPresent()) {
+    if (data.getUserId() != null) {
       User user = userRepository
-        .findById(data.getUserId().get())
+        .findById(data.getUserId())
         .orElseThrow(() -> new Exception());
 
       reservation.setUser(user);
     }
-    if (data.getCardId().isPresent()) {
+    if (data.getCardId() != null) {
       Card card = cardRepository
-        .findById(data.getCardId().get())
+        .findById(data.getCardId())
         .orElseThrow(() -> new Exception());
 
       reservation.setCard(card);
     }
-    if (data.getRoomId().isPresent()) {
+    if (data.getRoomId() != null) {
       Room room = roomRepository
-        .findById(data.getRoomId().get())
+        .findById(data.getRoomId().intValue())
         .orElseThrow(() -> new Exception());
 
       reservation.setRoom(room);
