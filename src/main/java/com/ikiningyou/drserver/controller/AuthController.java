@@ -7,14 +7,12 @@ import com.ikiningyou.drserver.service.AuthService;
 import com.ikiningyou.drserver.service.CardService;
 import com.ikiningyou.drserver.util.CardResults;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +33,14 @@ public class AuthController {
 
   @GetMapping("/admin")
   public ResponseEntity<Boolean> checkAdmin() {
+    HttpStatus status = HttpStatus.OK;
+    return ResponseEntity.status(status).body(true);
+  }
+
+  @GetMapping("/token/valid")
+  public ResponseEntity<Boolean> isJwtTokenVaild(HttpServletRequest request) {
+    String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+    log.info("auth {} ", authorization);
     HttpStatus status = HttpStatus.OK;
     return ResponseEntity.status(status).body(true);
   }
