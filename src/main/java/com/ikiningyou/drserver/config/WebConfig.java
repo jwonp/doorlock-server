@@ -73,7 +73,8 @@ public class WebConfig {
             "/auth/logout",
             "/user",
             "/card/lost",
-            "/auth/card"
+            "/auth/card",
+            "/auth/token/valid"
           )
           .permitAll()
           .requestMatchers(
