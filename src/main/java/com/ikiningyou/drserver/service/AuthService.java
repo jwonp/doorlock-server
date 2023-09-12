@@ -3,10 +3,12 @@ package com.ikiningyou.drserver.service;
 import com.ikiningyou.drserver.config.EncoderConfig;
 import com.ikiningyou.drserver.model.dao.Authority;
 import com.ikiningyou.drserver.model.dao.TagLog;
+import com.ikiningyou.drserver.model.dao.User;
 import com.ikiningyou.drserver.model.dao.UserDetail;
 import com.ikiningyou.drserver.repository.AuthorityRepository;
 import com.ikiningyou.drserver.repository.LogRepository;
 import com.ikiningyou.drserver.repository.UserDetailRepository;
+import com.ikiningyou.drserver.repository.UserRepository;
 import com.ikiningyou.drserver.util.Authorities;
 import com.ikiningyou.drserver.util.CardResults;
 import com.ikiningyou.drserver.util.JwtUtil;
@@ -29,10 +31,10 @@ public class AuthService {
   private LogRepository logRepository;
 
   @Autowired
-  private UserDetailRepository userDetailRepository;
+  private UserRepository userRepository;
 
   @Autowired
-  private AuthorityRepository authorityRepository;
+  private UserDetailRepository userDetailRepository;
 
   @Autowired
   private EncoderConfig encoderConfig;
@@ -47,7 +49,7 @@ public class AuthService {
     if (result.split(".").length > 2) {
       tagResult = CardResults.CARD_ADMIN;
     }
-    TagLog log = TagLog 
+    TagLog log = TagLog
       .builder()
       .cardId(cardId)
       .address(address)
@@ -62,35 +64,52 @@ public class AuthService {
     }
   }
 
-  public String login(String username, String password)
+  public String login(String userId, String password)
     throws UsernameNotFoundException, BadCredentialsException {
     Supplier<UsernameNotFoundException> s = () ->
       new UsernameNotFoundException("로그인 과정에 오류가 발생했습니다.");
-    UserDetail user = userDetailRepository
-      .findUserDetailByUsername(username)
+    UserDetail userDetail = userDetailRepository
+      .findById(userId)
       .orElseThrow(s);
-    log.info("{} {}", password, user.getPassword());
+    log.info("{} {}", password, userDetail.getPassword());
     if (
       encoderConfig
         .bCryptPasswordEncoder()
-        .matches(password, user.getPassword()) ==
+        .matches(password, userDetail.getPassword()) ==
       false
     ) {
       throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
     }
-    String token = JwtUtil.createToken(user.getUsername(), key, expireTimeMs);
-
+    User user = userRepository
+      .findById(userId)
+      .orElseThrow(() ->
+        new UsernameNotFoundException("해당 아이디가 존재하지 않습니다.")
+      );
+    String token = JwtUtil.createToken(
+      user.getId(),
+      user.getName(),
+      key,
+      expireTimeMs
+    );
+    log.info("created token {}", token);
     return token;
   }
 
   public boolean isAdmin(String username) {
-    Authority authority = authorityRepository
-      .findByUser(username)
+    UserDetail userDetail = userDetailRepository
+      .findById(username)
       .orElseThrow(() ->
         new UsernameNotFoundException("해당 유저를 찾을 수 없습니다")
       );
 
-    boolean isAdmin = authority.getAuthority().equals(Authorities.ADMIN);
+    boolean isAdmin =
+      userDetail
+        .getAuthorityList()
+        .stream()
+        .filter(item -> item.getAuthority().equals(Authorities.ADMIN))
+        .toArray(String[]::new)
+        .length >
+      0;
 
     return isAdmin;
   }

@@ -38,7 +38,8 @@ public class User {
   @OneToMany(mappedBy = "user")
   private List<Reservation> reservations;
 
-  @OneToOne(fetch = FetchType.LAZY)
+  @OneToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "username", updatable = true)
   private UserDetail userDetail;
+
 }

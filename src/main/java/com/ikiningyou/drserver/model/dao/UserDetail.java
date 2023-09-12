@@ -6,7 +6,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -38,17 +37,17 @@ public class UserDetail implements UserDetails {
   @Column(name = "password", nullable = false)
   private String password;
 
-  @OneToMany(fetch = FetchType.EAGER)
-  @JoinTable(
-    name = "user_authority", //조인테이블명
-    joinColumns = @JoinColumn(name = "username"), //외래키
-    inverseJoinColumns = @JoinColumn(name = "user") //반대 엔티티의 외래키
-  )
-  private List<Authority> authorities;
+  @OneToMany(mappedBy = "userDetail",fetch = FetchType.EAGER)
+  // @JoinTable(
+  //   name = "user_authority", //조인테이블명
+  //   joinColumns = @JoinColumn(name = "username"), //외래키
+  //   inverseJoinColumns = @JoinColumn(name = "user") //반대 엔티티의 외래키
+  // )
+  private List<Authority> authorityList;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return authorities
+    return authorityList
       .stream()
       .map(a -> new SimpleGrantedAuthority(a.getAuthority()))
       .collect(Collectors.toList());

@@ -56,11 +56,11 @@ public class JwtFilter extends OncePerRequestFilter {
       return;
     }
 
-    //username Token에서 꺼내기
-    String username = JwtUtil.getUsername(token, secretKey);
+    //user id Token에서 꺼내기
+    String userId = JwtUtil.getUserId(token, secretKey);
 
-    log.info("username:{}", username);
-    boolean isAdmin = authService.isAdmin(username);
+    log.info("username:{}", userId);
+    boolean isAdmin = authService.isAdmin(userId);
     String authority = Authorities.USER;
     if (isAdmin) {
       authority = Authorities.ADMIN;
@@ -68,7 +68,7 @@ public class JwtFilter extends OncePerRequestFilter {
     log.info("is admin {} , authority {} ", isAdmin, authority);
     //권한 부여
     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-      username,
+      userId,
       null,
       List.of(new SimpleGrantedAuthority(authority))
     );
