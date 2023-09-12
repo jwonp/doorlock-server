@@ -11,6 +11,7 @@ import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationResponse;
 import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationWithUserResponse;
 import com.ikiningyou.drserver.model.dto.reservation.web.ReservationAdminResponse;
 import com.ikiningyou.drserver.model.dto.reservation.web.ReservationWithProfile;
+import com.ikiningyou.drserver.model.dto.reservedRequest.web.AdminCancelRequest;
 import com.ikiningyou.drserver.model.dto.reservedRequest.web.AdminReservedRequestResponse;
 import com.ikiningyou.drserver.repository.CardRepository;
 import com.ikiningyou.drserver.repository.ReservationRepository;
@@ -27,8 +28,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class ReservationService {
@@ -213,10 +217,14 @@ public class ReservationService {
     Reservation reservation = reservationRepository
       .findById(reservationId)
       .orElseThrow(() -> new NotFoundException());
+    Room room = roomRepository
+      .findById(roomId)
+      .orElseThrow(() -> new NotFoundException());
     ReservedRequest request = ReservedRequest
       .builder()
+      .reservation(reservation)
       .user(reservation.getUser())
-      .room(reservation.getRoom())
+      .room(room)
       .isAccepted(false)
       .build();
     try {
@@ -228,5 +236,15 @@ public class ReservationService {
       e.printStackTrace();
     }
     return false;
+  }
+
+  public Boolean cancelReservedRequest(Long requestId) {
+    try {
+      reservedRequestRepository.deleteAllByIdInQuery(requestId);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+    return true;
   }
 }
