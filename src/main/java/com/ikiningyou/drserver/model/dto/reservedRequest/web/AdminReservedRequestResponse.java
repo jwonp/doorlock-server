@@ -12,10 +12,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AdminReservedRequestResponse {
 
+  private Long requestId;
   private Long reservationId;
   private String name;
   private String userId;
   private String phone;
+  private int roomId;
   private String address;
   private Timestamp requestedTime;
 }

@@ -10,10 +10,12 @@ public class ReservedRequestBuilder {
   ) {
     return AdminReservedRequestResponse
       .builder()
-      .reservationId(request.getId())
+      .requestId(request.getId())
+      .reservationId(request.getReservation().getId())
       .name(request.getUser().getName())
       .userId(request.getUser().getId())
       .phone(request.getUser().getPhone())
+      .roomId(request.getRoom().getId())
       .address(request.getRoom().getAddress())
       .requestedTime(request.getRequestedTime())
       .build();
