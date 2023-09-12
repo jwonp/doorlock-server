@@ -107,7 +107,7 @@ public class AuthService {
         .getAuthorityList()
         .stream()
         .filter(item -> item.getAuthority().equals(Authorities.ADMIN))
-        .toArray(String[]::new)
+        .toArray(Authority[]::new)
         .length >
       0;
 
