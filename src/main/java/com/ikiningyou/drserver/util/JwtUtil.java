@@ -31,13 +31,14 @@ public class JwtUtil {
     }
   }
 
-  public static String getUsername(String token, String secretKey) {
+
+  public static String getUserId(String token, String secretKey) {
     return Jwts
       .parser()
       .setSigningKey(secretKey)
       .parseClaimsJws(token)
       .getBody()
-      .get("username", String.class);
+      .get("userId", String.class);
   }
 
   public static boolean isExpired(String token, String secretKey) {
@@ -51,12 +52,14 @@ public class JwtUtil {
   }
 
   public static String createToken(
-    String username,
+    String userId,
+    String name,
     String key,
     long expireTimeMs
   ) {
     Claims claims = Jwts.claims();
-    claims.put("username", username);
+    claims.put("userId", userId);
+    claims.put("name", name);
 
     return Jwts
       .builder()
