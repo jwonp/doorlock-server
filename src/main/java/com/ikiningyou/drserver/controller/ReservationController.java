@@ -9,6 +9,7 @@ import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationResponse;
 import com.ikiningyou.drserver.model.dto.reservation.mobile.ReservationWithUserResponse;
 import com.ikiningyou.drserver.model.dto.reservation.web.ReservationAdminResponse;
 import com.ikiningyou.drserver.model.dto.reservation.web.ReservationWithProfile;
+import com.ikiningyou.drserver.model.dto.reservedRequest.web.AdminCancelRequest;
 import com.ikiningyou.drserver.model.dto.reservedRequest.web.AdminReservedRequestResponse;
 import com.ikiningyou.drserver.model.dto.reservedRequest.web.ReservationChangeRequest;
 import com.ikiningyou.drserver.service.ReservationService;
@@ -148,6 +149,17 @@ public class ReservationController {
     AdminReservedRequestResponse[] reservations = reservationService.getAdminReservedRequests();
     HttpStatus status = HttpStatus.OK;
     return ResponseEntity.status(status).body(reservations);
+  }
+
+  @DeleteMapping("/admin/reserved")
+  public ResponseEntity<Boolean> cancelReservedRequest(
+    @RequestBody AdminCancelRequest request
+  ) {
+    Boolean isDeleted = reservationService.cancelReservedRequest(
+      request.getRequestId()
+    );
+    HttpStatus status = HttpStatus.OK;
+    return ResponseEntity.status(status).body(isDeleted);
   }
 
   @GetMapping("/admin")
