@@ -1,5 +1,6 @@
 package com.ikiningyou.drserver.model.dao;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,7 +28,7 @@ public class LostCard {
   @Column(name = "card_id", nullable = false)
   private String id;
 
-  @OneToOne(fetch = FetchType.LAZY)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @MapsId
   @JoinColumn(name = "card_id")
   private Card card;
