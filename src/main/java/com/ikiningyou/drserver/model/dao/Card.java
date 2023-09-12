@@ -67,10 +67,9 @@ public class Card {
   @Column(name = "last_tagged", nullable = true)
   private LocalDateTime lastTagged;
 
-  @OneToOne(mappedBy = "card")
+  @OneToOne(mappedBy = "card", orphanRemoval = true)
   private Reservation reservation;
 
-  @OneToOne(mappedBy="card", cascade=CascadeType.ALL)
+  @OneToOne(mappedBy = "card", orphanRemoval = true)
   private LostCard lostCard;
-
 }
