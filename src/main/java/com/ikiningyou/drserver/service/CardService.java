@@ -126,7 +126,12 @@ public class CardService {
     }
     card.get().setLastTagged(LocalDateTime.now());
     if (card.get().isAdmin()) {
-      return JwtUtil.createToken(Authorities.ADMIN_CARD, key, expireTimeMs);
+      return JwtUtil.createToken(
+        Authorities.ADMIN_CARD,
+        Authorities.ADMIN_CARD,
+        key,
+        expireTimeMs
+      );
     }
     return CardResults.CARD_AUTHORIZED;
   }
