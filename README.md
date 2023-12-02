@@ -60,8 +60,8 @@
 		</td>
 	</tr>
 	<tr>
-		<td class="text">AWS RDS</td>
-  		<td class="text">AWS EC2</td>
+		<td class="text">AWS EC2</td>
+  		<td class="text">AWS RDS</td>
 	</tr>
 
 </table>
